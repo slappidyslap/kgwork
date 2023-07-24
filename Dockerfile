@@ -1,6 +1,6 @@
 FROM gradle:8-jdk11-alpine AS gradle
 COPY . .
-RUN gradle clean build
+RUN ./gradlew clean build
 
 FROM eclipse-temurin:11-jre-alpine
 COPY --from=gradle ./build/libs/*.jar app.jar
