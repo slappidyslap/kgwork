@@ -4,6 +4,6 @@ RUN gradle clean build
 RUN pwd
 
 FROM eclipse-temurin:17-jre-alpine
-COPY --from=gradle /build/libs/*.jar app.jar
+COPY --from=gradle /home/gradle/build/libs/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "-Dspring.profile.active=dev", "app.jar"]
