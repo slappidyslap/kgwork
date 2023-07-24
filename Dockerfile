@@ -1,4 +1,5 @@
 FROM gradle:8-jdk17-alpine AS gradle
+WORKDIR sdk
 COPY . .
 RUN gradle clean build
 
