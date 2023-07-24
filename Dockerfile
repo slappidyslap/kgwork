@@ -1,4 +1,4 @@
-FROM gradle:8-jdk11-alpine AS gradle
+FROM gradle:8-jdk17-alpine AS gradle
 COPY . .
 RUN gradle clean build
 
