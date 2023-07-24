@@ -1,5 +1,8 @@
+FROM gradle:8-jdk11-alpine AS gradle
+COPY . .
+RUN gradle clean build
+
 FROM eclipse-temurin:11-jre-alpine
-WORKDIR app
-COPY ./build/libs/*.jar app.jar
+COPY --from=gradle ./build/libs/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "-Dspring.profile.active=dev", "app.jar"]
