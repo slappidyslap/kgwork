@@ -1,6 +1,6 @@
 FROM gradle:8-jdk17-alpine AS gradle
-WORKDIR sdk
 COPY . .
+CMD "ls -lah"
 RUN gradle clean build
 
 FROM eclipse-temurin:17-jre-alpine
