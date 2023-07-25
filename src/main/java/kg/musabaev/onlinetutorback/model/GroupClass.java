@@ -1,9 +1,6 @@
 package kg.musabaev.onlinetutorback.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,12 +10,8 @@ import lombok.experimental.SuperBuilder;
 import java.time.Instant;
 
 @Entity
-@Table(
-        name = "group_classes",
-        indexes = @Index(
-                name = "group_classes_title_idx",
-                columnList = "title",
-                unique = true))
+@Table(name = "group_classes")
+@DiscriminatorValue("group_class")
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)

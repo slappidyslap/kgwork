@@ -54,7 +54,7 @@ public class SimpleClassService implements ClassService {
 
 	@Override
 	public ResponseEntity<Void> updateGroupClass(Long id, UpdateGroupClassRequest dto) {
-		throwConflictIf(() -> groupClassRepo.existsByTitleAndIgnoringById(dto.getTitle(), id));
+		throwConflictIf(() -> groupClassRepo.existsByTitleAndIdNot(dto.getTitle(), id));
 
 		Optional<GroupClass> persistedClass = groupClassRepo.findById(id);
 		persistedClass.ifPresent(c -> {
@@ -67,7 +67,7 @@ public class SimpleClassService implements ClassService {
 
 	@Override
 	public ResponseEntity<Void> updateIndividualClass(Long id, UpdateIndividualClassRequest dto) {
-		throwConflictIf(() -> individualClassRepo.existsByTitleAndIgnoringById(dto.getTitle(), id));
+		throwConflictIf(() -> individualClassRepo.existsByTitleAndIdNot(dto.getTitle(), id));
 
 		Optional<IndividualClass> persistedClass = individualClassRepo.findById(id);
 		persistedClass.ifPresent(c -> {

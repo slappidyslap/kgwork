@@ -7,7 +7,10 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
-@MappedSuperclass
+@Entity
+@Table(name = "base_classes")
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "class_type", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
 @ToString

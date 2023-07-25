@@ -11,12 +11,8 @@ import lombok.experimental.SuperBuilder;
 import java.time.Duration;
 
 @Entity
-@Table(
-        name = "individual_classes",
-        indexes = @Index(
-                name = "individual_classes_title_idx",
-                columnList = "title",
-                unique = true))
+@Table(name = "individual_classes")
+@DiscriminatorValue("individual_class")
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
