@@ -2,6 +2,7 @@ package kg.musabaev.onlinetutorback.model;
 
 import jakarta.persistence.*;
 import kg.musabaev.onlinetutorback.util.converter.DurationInSecondsConverter;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +19,7 @@ import java.time.Duration;
                 unique = true))
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @NoArgsConstructor
 public class IndividualClass extends BaseClass {

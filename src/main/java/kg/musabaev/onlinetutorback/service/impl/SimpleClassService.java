@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -37,24 +38,24 @@ public class SimpleClassService implements ClassService {
 
 	@Override
 	public ResponseEntity<NewClassResponse> createGroupClass(NewGroupClassRequest dto) {
-		if (groupClassRepo.existsByTitle(dto.getTitle()))
-			throw new ResponseStatusException(CONFLICT);
+		throwConflictIf(() -> groupClassRepo.existsByTitle(dto.getTitle()));
+
 		var savedClass = groupClassRepo.save(classMapper.toModel(dto));
 		return ResponseEntity.ok(classMapper.toDto(savedClass));
 	}
 
 	@Override
 	public ResponseEntity<NewClassResponse> createIndividualClass(NewIndividualClassRequest dto) {
-		if (individualClassRepo.existsByTitle(dto.getTitle()))
-			return new ResponseEntity<>(CONFLICT);
+		throwConflictIf(() -> individualClassRepo.existsByTitle(dto.getTitle()));
+
 		var savedClass = individualClassRepo.save(classMapper.toModel(dto));
 		return ResponseEntity.ok(classMapper.toDto(savedClass));
 	}
 
 	@Override
 	public ResponseEntity<Void> updateGroupClass(Long id, UpdateGroupClassRequest dto) {
-		if (groupClassRepo.existsByTitleAndIgnoringById(dto.getTitle(), id))
-			return new ResponseEntity<>(CONFLICT);
+		throwConflictIf(() -> groupClassRepo.existsByTitleAndIgnoringById(dto.getTitle(), id));
+
 		Optional<GroupClass> persistedClass = groupClassRepo.findById(id);
 		persistedClass.ifPresent(c -> {
 			classMapper.update(dto, c);
@@ -66,8 +67,8 @@ public class SimpleClassService implements ClassService {
 
 	@Override
 	public ResponseEntity<Void> updateIndividualClass(Long id, UpdateIndividualClassRequest dto) {
-		if (individualClassRepo.existsByTitleAndIgnoringById(dto.getTitle(), id))
-			return new ResponseEntity<>(CONFLICT);
+		throwConflictIf(() -> individualClassRepo.existsByTitleAndIgnoringById(dto.getTitle(), id));
+
 		Optional<IndividualClass> persistedClass = individualClassRepo.findById(id);
 		persistedClass.ifPresent(c -> {
 			classMapper.update(dto, c);
@@ -97,5 +98,9 @@ public class SimpleClassService implements ClassService {
 	public ResponseEntity<IndividualClassItemView> getIndividualClassById(long id) {
 		var clazz = individualClassRepo.findProjectedById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
 		return ResponseEntity.ok(clazz);
+	}
+
+	public void throwConflictIf(Supplier<Boolean> function) {
+		if (function.get()) throw new ResponseStatusException(CONFLICT);
 	}
 }
