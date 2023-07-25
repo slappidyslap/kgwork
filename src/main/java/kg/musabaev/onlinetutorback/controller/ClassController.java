@@ -52,4 +52,14 @@ public class ClassController {
 	ResponseEntity<Page<IndividualClassItemView>> getAllIndividualClasses(@ParameterObject @PageableDefault Pageable pageable) {
 		return classService.getAllIndividualClasses(pageable);
 	}
+
+	@GetMapping("/groups/{id}")
+	ResponseEntity<GroupClassItemView> getGroupClassById(@PathVariable long id) {
+		return classService.getGroupClassById(id);
+	}
+
+	@GetMapping("/individuals/{id}")
+	ResponseEntity<IndividualClassItemView> getIndividualClassById(@PathVariable long id) {
+		return classService.getIndividualClassById(id);
+	}
 }

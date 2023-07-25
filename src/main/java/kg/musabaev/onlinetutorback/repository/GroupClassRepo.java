@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 
 @Repository
 public interface GroupClassRepo extends JpaRepository<GroupClass, Long> {
@@ -19,4 +21,6 @@ public interface GroupClassRepo extends JpaRepository<GroupClass, Long> {
 	boolean existsByTitleAndIgnoringById(@Param("title") String title, @Param("id") Long id);
 
 	Page<GroupClassItemView> findAllProjectedBy(Pageable pageable);
+
+	Optional<GroupClassItemView> findProjectedById(long id);
 }

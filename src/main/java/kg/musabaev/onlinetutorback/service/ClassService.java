@@ -24,5 +24,7 @@ public interface ClassService {
 
 	ResponseEntity<Page<IndividualClassItemView>> getAllIndividualClasses(Pageable pageable);
 
-	ResponseEntity<Page<IndividualClassListView>> getAllIndividualClasses(Pageable pageable);
+	ResponseEntity<GroupClassItemView> getGroupClassById(long id);
+
+	ResponseEntity<IndividualClassItemView> getIndividualClassById(long id);
 }

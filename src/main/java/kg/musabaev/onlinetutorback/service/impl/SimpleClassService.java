@@ -86,4 +86,16 @@ public class SimpleClassService implements ClassService {
 	public ResponseEntity<Page<IndividualClassItemView>> getAllIndividualClasses(Pageable pageable) {
 		return ResponseEntity.ok(individualClassRepo.findAllProjectedBy(pageable));
 	}
+
+	@Override
+	public ResponseEntity<GroupClassItemView> getGroupClassById(long id) {
+		var clazz = groupClassRepo.findProjectedById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+		return ResponseEntity.ok(clazz);
+	}
+
+	@Override
+	public ResponseEntity<IndividualClassItemView> getIndividualClassById(long id) {
+		var clazz = individualClassRepo.findProjectedById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+		return ResponseEntity.ok(clazz);
+	}
 }
