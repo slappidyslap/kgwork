@@ -5,8 +5,8 @@ import kg.musabaev.onlinetutorback.dto.request.NewIndividualClassRequest;
 import kg.musabaev.onlinetutorback.dto.request.UpdateGroupClassRequest;
 import kg.musabaev.onlinetutorback.dto.request.UpdateIndividualClassRequest;
 import kg.musabaev.onlinetutorback.dto.response.NewClassResponse;
-import kg.musabaev.onlinetutorback.repository.projection.GroupClassListView;
-import kg.musabaev.onlinetutorback.repository.projection.IndividualClassListView;
+import kg.musabaev.onlinetutorback.repository.projection.GroupClassItemView;
+import kg.musabaev.onlinetutorback.repository.projection.IndividualClassItemView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,9 @@ public interface ClassService {
 
 	ResponseEntity<Void> updateIndividualClass(Long id, UpdateIndividualClassRequest dto);
 
-	ResponseEntity<Page<GroupClassListView>> getAllGroupClasses(Pageable pageable);
+	ResponseEntity<Page<GroupClassItemView>> getAllGroupClasses(Pageable pageable);
+
+	ResponseEntity<Page<IndividualClassItemView>> getAllIndividualClasses(Pageable pageable);
 
 	ResponseEntity<Page<IndividualClassListView>> getAllIndividualClasses(Pageable pageable);
 }

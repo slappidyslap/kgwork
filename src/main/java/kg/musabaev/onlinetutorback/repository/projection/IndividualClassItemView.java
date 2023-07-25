@@ -6,7 +6,7 @@ import kg.musabaev.onlinetutorback.config.jackson.DurationSerializer;
 
 import java.time.Duration;
 
-public interface IndividualClassListView extends BaseClassListView {
+public interface IndividualClassItemView extends BaseClassItemView {
 	@JsonProperty("durationInSeconds")
 	@JsonSerialize(using = DurationSerializer.class)
 	Duration getDuration();

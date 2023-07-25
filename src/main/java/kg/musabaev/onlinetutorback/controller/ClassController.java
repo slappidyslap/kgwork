@@ -5,8 +5,8 @@ import kg.musabaev.onlinetutorback.dto.request.NewIndividualClassRequest;
 import kg.musabaev.onlinetutorback.dto.request.UpdateGroupClassRequest;
 import kg.musabaev.onlinetutorback.dto.request.UpdateIndividualClassRequest;
 import kg.musabaev.onlinetutorback.dto.response.NewClassResponse;
-import kg.musabaev.onlinetutorback.repository.projection.GroupClassListView;
-import kg.musabaev.onlinetutorback.repository.projection.IndividualClassListView;
+import kg.musabaev.onlinetutorback.repository.projection.GroupClassItemView;
+import kg.musabaev.onlinetutorback.repository.projection.IndividualClassItemView;
 import kg.musabaev.onlinetutorback.service.ClassService;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -44,12 +44,12 @@ public class ClassController {
 	}
 
 	@GetMapping("/groups")
-	ResponseEntity<Page<GroupClassListView>> getAllGroupClasses(@ParameterObject @PageableDefault Pageable pageable) {
+	ResponseEntity<Page<GroupClassItemView>> getAllGroupClasses(@ParameterObject @PageableDefault Pageable pageable) {
 		return classService.getAllGroupClasses(pageable);
 	}
 
 	@GetMapping("/individuals")
-	ResponseEntity<Page<IndividualClassListView>> getAllIndividualClasses(@ParameterObject @PageableDefault Pageable pageable) {
+	ResponseEntity<Page<IndividualClassItemView>> getAllIndividualClasses(@ParameterObject @PageableDefault Pageable pageable) {
 		return classService.getAllIndividualClasses(pageable);
 	}
 }

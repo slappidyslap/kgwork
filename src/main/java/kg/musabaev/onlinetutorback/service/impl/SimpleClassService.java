@@ -10,8 +10,8 @@ import kg.musabaev.onlinetutorback.model.GroupClass;
 import kg.musabaev.onlinetutorback.model.IndividualClass;
 import kg.musabaev.onlinetutorback.repository.GroupClassRepo;
 import kg.musabaev.onlinetutorback.repository.IndividualClassRepo;
-import kg.musabaev.onlinetutorback.repository.projection.GroupClassListView;
-import kg.musabaev.onlinetutorback.repository.projection.IndividualClassListView;
+import kg.musabaev.onlinetutorback.repository.projection.GroupClassItemView;
+import kg.musabaev.onlinetutorback.repository.projection.IndividualClassItemView;
 import kg.musabaev.onlinetutorback.service.ClassService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -78,12 +78,12 @@ public class SimpleClassService implements ClassService {
 	}
 
 	@Override
-	public ResponseEntity<Page<GroupClassListView>> getAllGroupClasses(Pageable pageable) {
+	public ResponseEntity<Page<GroupClassItemView>> getAllGroupClasses(Pageable pageable) {
 		return ResponseEntity.ok(groupClassRepo.findAllProjectedBy(pageable));
 	}
 
 	@Override
-	public ResponseEntity<Page<IndividualClassListView>> getAllIndividualClasses(Pageable pageable) {
+	public ResponseEntity<Page<IndividualClassItemView>> getAllIndividualClasses(Pageable pageable) {
 		return ResponseEntity.ok(individualClassRepo.findAllProjectedBy(pageable));
 	}
 }

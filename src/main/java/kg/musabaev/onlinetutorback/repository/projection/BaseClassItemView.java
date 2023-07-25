@@ -2,7 +2,7 @@ package kg.musabaev.onlinetutorback.repository.projection;
 
 import java.time.LocalDate;
 
-public interface BaseClassListView {
+public interface BaseClassItemView {
 	Long getId();
 	String getTitle();
 	String getDescription();
