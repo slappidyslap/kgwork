@@ -15,7 +15,7 @@ import java.util.List;
 @DiscriminatorColumn(name = "class_type", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"specialistId", "categories"})
 @SuperBuilder
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
