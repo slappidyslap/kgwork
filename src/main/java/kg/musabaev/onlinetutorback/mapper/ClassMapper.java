@@ -19,12 +19,14 @@ public interface ClassMapper {
 
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "createdDate", ignore = true)
+	@Mapping(target = "categories", ignore = true)
 	GroupClass toModel(NewGroupClassRequest dto);
 
 	NewClassResponse toDto(GroupClass clazz);
 
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "createdDate", ignore = true)
+	@Mapping(target = "categories", ignore = true)
 	@Mapping(source = "durationInSeconds", target = "duration", qualifiedByName = "secondsToDuration")
 	IndividualClass toModel(NewIndividualClassRequest dto);
 
@@ -33,12 +35,14 @@ public interface ClassMapper {
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "createdDate", ignore = true)
 	@Mapping(target = "specialistId", ignore = true)
+	@Mapping(target = "categories", ignore = true)
 	@Mapping(source = "durationInSeconds", target = "duration", qualifiedByName = "secondsToDuration")
 	void update(UpdateIndividualClassRequest source, @MappingTarget IndividualClass dest);
 
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "createdDate", ignore = true)
 	@Mapping(target = "specialistId", ignore = true)
+	@Mapping(target = "categories", ignore = true)
 	void update(UpdateGroupClassRequest source, @MappingTarget GroupClass dest);
 
 	@Named("secondsToDuration")

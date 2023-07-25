@@ -6,6 +6,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "base_classes")
@@ -28,6 +30,13 @@ public class BaseClass {
 	@Builder.Default
 	String description = "";
 	Long specialistId; // FIXME
+	@Builder.Default
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "classes_categories",
+			joinColumns = @JoinColumn(name = "class_id"),
+			inverseJoinColumns = @JoinColumn(name = "category_id"))
+	List<Category> categories = new ArrayList<>();
 	@Column(nullable = false)
 	Integer price;
 	@Column(nullable = false, updatable = false)

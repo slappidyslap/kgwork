@@ -8,6 +8,7 @@ import kg.musabaev.onlinetutorback.dto.response.NewClassResponse;
 import kg.musabaev.onlinetutorback.mapper.ClassMapper;
 import kg.musabaev.onlinetutorback.model.GroupClass;
 import kg.musabaev.onlinetutorback.model.IndividualClass;
+import kg.musabaev.onlinetutorback.repository.CategoryRepo;
 import kg.musabaev.onlinetutorback.repository.GroupClassRepo;
 import kg.musabaev.onlinetutorback.repository.IndividualClassRepo;
 import kg.musabaev.onlinetutorback.repository.projection.GroupClassItemView;
@@ -35,12 +36,15 @@ public class SimpleClassService implements ClassService {
 	private final ClassMapper classMapper;
 	private final GroupClassRepo groupClassRepo;
 	private final IndividualClassRepo individualClassRepo;
+	private final CategoryRepo categoryRepo;
 
 	@Override
 	public ResponseEntity<NewClassResponse> createGroupClass(NewGroupClassRequest dto) {
 		throwConflictIf(() -> groupClassRepo.existsByTitle(dto.getTitle()));
 
-		var savedClass = groupClassRepo.save(classMapper.toModel(dto));
+		var clazz = classMapper.toModel(dto);
+		clazz.setCategories(categoryRepo.findAllByIdIn(dto.getCategoryIds()));
+		var savedClass = groupClassRepo.save(clazz);
 		return ResponseEntity.ok(classMapper.toDto(savedClass));
 	}
 
@@ -48,7 +52,9 @@ public class SimpleClassService implements ClassService {
 	public ResponseEntity<NewClassResponse> createIndividualClass(NewIndividualClassRequest dto) {
 		throwConflictIf(() -> individualClassRepo.existsByTitle(dto.getTitle()));
 
-		var savedClass = individualClassRepo.save(classMapper.toModel(dto));
+		var clazz = classMapper.toModel(dto);
+		clazz.setCategories(categoryRepo.findAllByIdIn(dto.getCategoryIds()));
+		var savedClass = individualClassRepo.save(clazz);
 		return ResponseEntity.ok(classMapper.toDto(savedClass));
 	}
 
@@ -59,6 +65,7 @@ public class SimpleClassService implements ClassService {
 		Optional<GroupClass> persistedClass = groupClassRepo.findById(id);
 		persistedClass.ifPresent(c -> {
 			classMapper.update(dto, c);
+			c.setCategories(categoryRepo.findAllByIdIn(dto.getCategoryIds()));
 			groupClassRepo.save(c);
 		});
 		persistedClass.orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
@@ -72,6 +79,7 @@ public class SimpleClassService implements ClassService {
 		Optional<IndividualClass> persistedClass = individualClassRepo.findById(id);
 		persistedClass.ifPresent(c -> {
 			classMapper.update(dto, c);
+			c.setCategories(categoryRepo.findAllByIdIn(dto.getCategoryIds()));
 			individualClassRepo.save(c);
 		});
 		persistedClass.orElseThrow(() -> new ResponseStatusException(NOT_FOUND));

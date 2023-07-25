@@ -5,3 +5,6 @@ databaseChangeLog:
   - include:
       file: changeset/change-structure.yml
       relativeToChangelogFile: true
+  - include:
+      file: changeset/create-category-table-and-relationship.yml
+      relativeToChangelogFile: true

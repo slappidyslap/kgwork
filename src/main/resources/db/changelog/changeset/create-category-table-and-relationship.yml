@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-category-table
+      author: Eld
+      changes:
+        - createTable:
+            tableName: categories
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: categories_id_pk
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+        - createIndex:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+            indexName: categories_name_idx
+            unique: true
+  - changeSet:
+      id: create-m2m-relationship
+      author: Eld
+      changes:
+        - createTable:
+            tableName: classes_categories
+            column:
+              - column:
+                  name: class_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    references: base_classes (id)
+                    foreignKeyName: base_classes_categories_base_class_id__base_class_id_id_fk
+              - column:
+                  name: category_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    references: categories (id)
+                    foreignKeyName: base_classes_categories_category_id__categories_id_fk
