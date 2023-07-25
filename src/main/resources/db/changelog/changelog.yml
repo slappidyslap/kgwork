@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: changeset/create-classes-tables.yml
+      relativeToChangelogFile: true

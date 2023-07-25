@@ -3,7 +3,11 @@ spring:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-
+  liquibase:
+    change-log: classpath:db/changelog/changelog.yml
+  jpa:
+    hibernate:
+      ddl-auto: validate
 logging:
   level:
     sql: debug
