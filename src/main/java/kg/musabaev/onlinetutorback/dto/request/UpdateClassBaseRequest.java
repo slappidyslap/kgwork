@@ -20,6 +20,7 @@ public class UpdateClassBaseRequest {
 	@NotNull
 	String description;
 	@PositiveOrZero
+	@NotNull
 	Integer price;
 	@JsonSetter(nulls = Nulls.SKIP)
 	@UrlOrNull

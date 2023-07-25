@@ -21,8 +21,10 @@ public abstract class NewClassBaseRequest {
 	@NotNull
 	String description;
 	@Positive
+	@NotNull
 	Long specialistId;
 	@PositiveOrZero
+	@NotNull
 	Integer price;
 	@JsonSetter(nulls = Nulls.SKIP)
 	@UrlOrNull
