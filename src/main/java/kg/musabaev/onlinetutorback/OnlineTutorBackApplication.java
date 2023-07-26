@@ -21,15 +21,16 @@ public class OnlineTutorBackApplication {
 	@Bean
 	CommandLineRunner runner1(CategoryRepo categoryRepo) {
 		return args -> {
-			categoryRepo.deleteAll();
-			categoryRepo.saveAll(Stream.of(
-					"Изучить английский язык с нуля до TOEFL",
-					"Подготовиться к ОРТ, НЦТ и гос. экзаменам",
-					"Выполнять домашние задания на продленке",
-					"Подготовиться к школе",
-					"Подтянуть успеваемость по всем школьным предметам",
-					"Подтянуть знание по математики с нуля"
-			).map(Category::new).toList());
+			if (categoryRepo.count() == 0) {
+				categoryRepo.saveAll(Stream.of(
+						"Изучить английский язык с нуля до TOEFL",
+						"Подготовиться к ОРТ, НЦТ и гос. экзаменам",
+						"Выполнять домашние задания на продленке",
+						"Подготовиться к школе",
+						"Подтянуть успеваемость по всем школьным предметам",
+						"Подтянуть знание по математики с нуля"
+				).map(Category::new).toList());
+			}
 		};
 	}
 }
