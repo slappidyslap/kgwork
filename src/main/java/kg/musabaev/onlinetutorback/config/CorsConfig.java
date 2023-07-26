@@ -1,4 +1,4 @@
-package kg.musabaev.onlinetutorback.config.jackson;
+package kg.musabaev.onlinetutorback.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
