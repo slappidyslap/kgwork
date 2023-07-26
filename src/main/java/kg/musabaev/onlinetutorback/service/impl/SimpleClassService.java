@@ -41,6 +41,7 @@ public class SimpleClassService implements ClassService {
 	@Override
 	public ResponseEntity<NewClassResponse> createGroupClass(NewGroupClassRequest dto) {
 		throwConflictIf(() -> groupClassRepo.existsByTitle(dto.getTitle()));
+		throwConflictIf(() -> individualClassRepo.existsByTitle(dto.getTitle()));
 
 		var clazz = classMapper.toModel(dto);
 		clazz.setCategories(categoryRepo.findAllByIdIn(dto.getCategoryIds()));
@@ -51,6 +52,7 @@ public class SimpleClassService implements ClassService {
 	@Override
 	public ResponseEntity<NewClassResponse> createIndividualClass(NewIndividualClassRequest dto) {
 		throwConflictIf(() -> individualClassRepo.existsByTitle(dto.getTitle()));
+		throwConflictIf(() -> groupClassRepo.existsByTitle(dto.getTitle()));
 
 		var clazz = classMapper.toModel(dto);
 		clazz.setCategories(categoryRepo.findAllByIdIn(dto.getCategoryIds()));
@@ -61,6 +63,7 @@ public class SimpleClassService implements ClassService {
 	@Override
 	public ResponseEntity<Void> updateGroupClass(Long id, UpdateGroupClassRequest dto) {
 		throwConflictIf(() -> groupClassRepo.existsByTitleAndIdNot(dto.getTitle(), id));
+		throwConflictIf(() -> individualClassRepo.existsByTitleAndIdNot(dto.getTitle(), id));
 
 		Optional<GroupClass> persistedClass = groupClassRepo.findById(id);
 		persistedClass.ifPresent(c -> {
@@ -75,6 +78,7 @@ public class SimpleClassService implements ClassService {
 	@Override
 	public ResponseEntity<Void> updateIndividualClass(Long id, UpdateIndividualClassRequest dto) {
 		throwConflictIf(() -> individualClassRepo.existsByTitleAndIdNot(dto.getTitle(), id));
+		throwConflictIf(() -> groupClassRepo.existsByTitleAndIdNot(dto.getTitle(), id));
 
 		Optional<IndividualClass> persistedClass = individualClassRepo.findById(id);
 		persistedClass.ifPresent(c -> {
