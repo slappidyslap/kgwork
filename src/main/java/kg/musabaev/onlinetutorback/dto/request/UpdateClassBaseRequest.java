@@ -2,6 +2,7 @@ package kg.musabaev.onlinetutorback.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -19,8 +20,10 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateClassBaseRequest {
 	@NotNull
+	@NotBlank
 	String title;
 	@NotNull
+	@NotBlank
 	String description;
 	@NotNull
 	@NotEmpty
