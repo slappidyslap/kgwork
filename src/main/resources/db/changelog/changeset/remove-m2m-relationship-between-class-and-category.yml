@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: delete-join-table
+      author: Eld
+      changes:
+        - dropTable:
+            tableName: classes_categories
+            cascadeConstraints: true
+  - changeSet:
+      id: add-column-for-base-classes-table
+      author: Eld
+      changes:
+        - addColumn:
+            tableName: base_classes
+            columns:
+              - column:
+                  name: category_id
+                  type: BIGINT
+                  defaultValue: 1
+                  constraints:
+                    nullable: false
+                    foreignKeyName: base_classes_category_id__categories_id_fk
+                    references: categories(id)

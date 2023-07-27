@@ -21,6 +21,7 @@ public interface GroupClassRepo extends JpaRepository<GroupClass, Long> {
 			c.description AS description,
 			c.price AS price,
 			c.createdDate AS createdDate,
+			c.category AS category,
 			c.coverUrl AS coverUrl,
 			c.startDateTime AS startDateTime,
 			c.finishDateTime AS finishDateTime,

@@ -20,6 +20,7 @@ public interface IndividualClassRepo extends JpaRepository<IndividualClass, Long
 			c.description AS description,
 			c.price AS price,
 			c.createdDate AS createdDate,
+			c.category AS category,
 			c.coverUrl AS coverUrl,
 			c.duration AS duration,
 			'individual_class' AS classType

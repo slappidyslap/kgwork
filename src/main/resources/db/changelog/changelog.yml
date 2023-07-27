@@ -8,3 +8,6 @@ databaseChangeLog:
   - include:
       file: changeset/create-category-table-and-relationship.yml
       relativeToChangelogFile: true
+  - include:
+      file: changeset/remove-m2m-relationship-between-class-and-category.yml
+      relativeToChangelogFile: true
