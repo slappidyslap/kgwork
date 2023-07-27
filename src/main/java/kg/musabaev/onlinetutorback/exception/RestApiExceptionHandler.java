@@ -6,10 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.Map;
 
 @RestControllerAdvice
 public class RestApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -22,5 +25,10 @@ public class RestApiExceptionHandler extends ResponseEntityExceptionHandler {
 			@NotNull HttpStatusCode status,
 			@NotNull WebRequest request) {
 		return super.handleMethodArgumentNotValid(ex, headers, status, request);
+	}
+
+	@ExceptionHandler({ClassNotFoundException.class, CommentNotFoundException.class})
+	Map<String, String> handleNotFound(Exception e) {
+		return Map.of("exception", e.getMessage());
 	}
 }
