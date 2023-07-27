@@ -5,6 +5,7 @@ import kg.musabaev.onlinetutorback.repository.projection.IndividualClassItemView
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -18,5 +19,17 @@ public interface IndividualClassRepo extends JpaRepository<IndividualClass, Long
 
 	Page<IndividualClassItemView> findAllProjectedBy(Pageable pageable);
 
+	@Query("""
+			SELECT
+			c.id AS id,
+			c.title AS title,
+			c.description AS description,
+			c.price AS price,
+			c.createdDate AS createdDate,
+			c.coverUrl AS coverUrl,
+			c.duration AS duration,
+			'individual_class' AS classType
+			FROM IndividualClass c WHERE c.id = :id
+			""")
 	Optional<IndividualClassItemView> findProjectedById(long id);
 }

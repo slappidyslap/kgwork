@@ -9,4 +9,5 @@ public interface BaseClassItemView {
 	Integer getPrice();
 	LocalDate getCreatedDate();
 	String getCoverUrl();
+	String getClassType();
 }
