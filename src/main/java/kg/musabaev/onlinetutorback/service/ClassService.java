@@ -20,9 +20,9 @@ public interface ClassService {
 
 	ResponseEntity<Void> updateIndividualClass(Long id, UpdateIndividualClassRequest dto);
 
-	ResponseEntity<Page<GroupClassItemView>> getAllGroupClasses(Pageable pageable);
+	ResponseEntity<Page<GroupClassItemView>> getAllGroupClasses(long categoryId, Pageable pageable);
 
-	ResponseEntity<Page<IndividualClassItemView>> getAllIndividualClasses(Pageable pageable);
+	ResponseEntity<Page<IndividualClassItemView>> getAllIndividualClasses(long categoryId, Pageable pageable);
 
 	ResponseEntity<GroupClassItemView> getGroupClassById(long id);
 

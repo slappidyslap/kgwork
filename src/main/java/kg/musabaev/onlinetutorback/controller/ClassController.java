@@ -44,13 +44,17 @@ public class ClassController {
 	}
 
 	@GetMapping("/groups")
-	ResponseEntity<Page<GroupClassItemView>> getAllGroupClasses(@ParameterObject @PageableDefault Pageable pageable) {
-		return classService.getAllGroupClasses(pageable);
+	ResponseEntity<Page<GroupClassItemView>> getAllGroupClasses(
+			@ParameterObject @PageableDefault Pageable pageable,
+			@RequestParam(name = "categoryId", defaultValue = "0") long categoryId) {
+		return classService.getAllGroupClasses(categoryId, pageable);
 	}
 
 	@GetMapping("/individuals")
-	ResponseEntity<Page<IndividualClassItemView>> getAllIndividualClasses(@ParameterObject @PageableDefault Pageable pageable) {
-		return classService.getAllIndividualClasses(pageable);
+	ResponseEntity<Page<IndividualClassItemView>> getAllIndividualClasses(
+			@ParameterObject @PageableDefault Pageable pageable,
+			@RequestParam(name = "categoryId", defaultValue = "0") long categoryId) {
+		return classService.getAllIndividualClasses(categoryId, pageable);
 	}
 
 	@GetMapping("/groups/{id}")

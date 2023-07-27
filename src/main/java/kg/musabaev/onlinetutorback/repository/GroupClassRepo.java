@@ -38,4 +38,7 @@ public interface GroupClassRepo extends JpaRepository<GroupClass, Long> {
 
 	@Query(queryProjected + " WHERE c.id = :id")
 	Optional<GroupClassItemView> findProjectedById(long id);
+
+	@Query(queryProjected + "WHERE c.category.id = :id")
+	Page<GroupClassItemView> findAllProjectedByCategoryId(long id, Pageable pageable);
 }

@@ -100,13 +100,17 @@ public class SimpleClassService implements ClassService {
 	}
 
 	@Override
-	public ResponseEntity<Page<GroupClassItemView>> getAllGroupClasses(Pageable pageable) {
-		return ResponseEntity.ok(groupClassRepo.findAllProjectedBy(pageable));
+	public ResponseEntity<Page<GroupClassItemView>> getAllGroupClasses(long categoryId, Pageable pageable) {
+		if (categoryId == 0)
+			return ResponseEntity.ok(groupClassRepo.findAllProjectedBy(pageable));
+		return ResponseEntity.ok(groupClassRepo.findAllProjectedByCategoryId(categoryId, pageable));
 	}
 
 	@Override
-	public ResponseEntity<Page<IndividualClassItemView>> getAllIndividualClasses(Pageable pageable) {
-		return ResponseEntity.ok(individualClassRepo.findAllProjectedBy(pageable));
+	public ResponseEntity<Page<IndividualClassItemView>> getAllIndividualClasses(long categoryId, Pageable pageable) {
+		if (categoryId == 0)
+			return ResponseEntity.ok(individualClassRepo.findAllProjectedBy(pageable));
+		return ResponseEntity.ok(individualClassRepo.findAllProjectedByCategoryId(categoryId, pageable));
 	}
 
 	@Override

@@ -36,4 +36,7 @@ public interface IndividualClassRepo extends JpaRepository<IndividualClass, Long
 
 	@Query(queryProjected + " WHERE c.id = :id")
 	Optional<IndividualClassItemView> findProjectedById(long id);
+
+	@Query(queryProjected + "WHERE c.category.id = :id")
+	Page<IndividualClassItemView> findAllProjectedByCategoryId(long id, Pageable pageable);
 }
