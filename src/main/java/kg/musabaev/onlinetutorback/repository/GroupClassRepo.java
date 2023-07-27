@@ -14,13 +14,7 @@ import java.util.Optional;
 @Repository
 public interface GroupClassRepo extends JpaRepository<GroupClass, Long> {
 
-	boolean existsByTitle(String title);
-
-	boolean existsByTitleAndIdNot(String title, Long id);
-
-	Page<GroupClassItemView> findAllProjectedBy(Pageable pageable);
-
-	@Query("""
+	String queryProjected = """
 			SELECT
 			c.id AS id,
 			c.title AS title,
@@ -31,7 +25,16 @@ public interface GroupClassRepo extends JpaRepository<GroupClass, Long> {
 			c.startDateTime AS startDateTime,
 			c.finishDateTime AS finishDateTime,
 			'group_class' AS classType
-			FROM GroupClass c WHERE c.id = :id
-			""")
+			FROM GroupClass c
+			""";
+
+	boolean existsByTitle(String title);
+
+	boolean existsByTitleAndIdNot(String title, Long id);
+
+	@Query(queryProjected)
+	Page<GroupClassItemView> findAllProjectedBy(Pageable pageable);
+
+	@Query(queryProjected + " WHERE c.id = :id")
 	Optional<GroupClassItemView> findProjectedById(long id);
 }

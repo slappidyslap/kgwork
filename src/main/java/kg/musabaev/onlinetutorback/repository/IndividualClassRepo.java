@@ -13,13 +13,7 @@ import java.util.Optional;
 @Repository
 public interface IndividualClassRepo extends JpaRepository<IndividualClass, Long> {
 
-	boolean existsByTitle(String title);
-
-	boolean existsByTitleAndIdNot(String title, Long id);
-
-	Page<IndividualClassItemView> findAllProjectedBy(Pageable pageable);
-
-	@Query("""
+	String queryProjected = """
 			SELECT
 			c.id AS id,
 			c.title AS title,
@@ -29,7 +23,16 @@ public interface IndividualClassRepo extends JpaRepository<IndividualClass, Long
 			c.coverUrl AS coverUrl,
 			c.duration AS duration,
 			'individual_class' AS classType
-			FROM IndividualClass c WHERE c.id = :id
-			""")
+			FROM IndividualClass c
+			""";
+
+	boolean existsByTitle(String title);
+
+	boolean existsByTitleAndIdNot(String title, Long id);
+
+	@Query(queryProjected)
+	Page<IndividualClassItemView> findAllProjectedBy(Pageable pageable);
+
+	@Query(queryProjected + " WHERE c.id = :id")
 	Optional<IndividualClassItemView> findProjectedById(long id);
 }
