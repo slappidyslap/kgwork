@@ -52,7 +52,7 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 }
 
-liquibase {
+/*liquibase {
 	activities {
 		main {
 			changeLogFile 'src/main/resources/changelog.yml'
@@ -61,7 +61,7 @@ liquibase {
 			password env.DB_PASSWORD.value
 		}
 	}
-}
+}*/
 
 tasks.register('bootDevRun', BootRun) {
 	mainClass = bootRun.mainClass
