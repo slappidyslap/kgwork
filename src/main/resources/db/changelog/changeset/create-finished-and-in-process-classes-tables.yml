@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-students-finished-classes-table
+      author: Eld
+      changes:
+        - createTable:
+            tableName: students_finished_classes
+            columns:
+              - column:
+                  name: student_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: students_finished_classes_student_id__students_id_fk
+                    references: students(id)
+              - column:
+                  name: finished_classes_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: students_finished_classes_finished_classes_id__base_classes_id_fk
+                    references: base_classes(id)
+        - addUniqueConstraint:
+            tableName: students_finished_classes
+            columnNames: student_id, finished_classes_id
+  - changeSet:
+      id: create-students_in_process_classes-table
+      author: Eld
+      changes:
+        - createTable:
+            tableName: students_in_process_classes
+            columns:
+              - column:
+                  name: student_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: students_in_process_classes_student_id__students_id_fk
+                    references: students(id)
+              - column:
+                  name: in_process_classes_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: students_in_process_classes_in_process_classes_id__base_classes_id_fk
+                    references: base_classes(id)
+        - addUniqueConstraint:
+            tableName: students_in_process_classes
+            columnNames: student_id, in_process_classes_id

@@ -32,3 +32,9 @@ springdoc:
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
   override-with-generic-response: false
+
+app:
+  security:
+    access-token-expiration-ms: "#{${ACCESS_TOKEN_EXPIRATION_MS:1000 * 60 * 30}}"
+    refresh-token-expiration-ms: "#{${REFRESH_TOKEN_EXPIRATION_MS:1000 * 60}}"
+    secret-key: ${SECRET_KEY:2DS534KHJ234FD059FK34JK8920DQIWP423XZ4234X423CXJ75123FJD4KD423LS}

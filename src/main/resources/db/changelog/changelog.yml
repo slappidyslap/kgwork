@@ -14,3 +14,12 @@ databaseChangeLog:
   - include:
       file: changeset/create-comment-table.yml
       relativeToChangelogFile: true
+  - include:
+      file: changeset/create-users-tables.yml
+      relativeToChangelogFile: true
+  - include:
+      file: changeset/create-finished-and-in-process-classes-tables.yml
+      relativeToChangelogFile: true
+  - include:
+      file: changeset/create-refresh-tokens-table.yml
+      relativeToChangelogFile: true
