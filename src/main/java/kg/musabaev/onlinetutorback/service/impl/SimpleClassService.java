@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +51,7 @@ public class SimpleClassService implements ClassService {
 		Category category = categoryRepo.findById(dto.getCategoryId()).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
 		clazz.setCategory(category);
 		var savedClass = groupClassRepo.save(clazz);
-		return ResponseEntity.ok(classMapper.toDto(savedClass));
+		return new ResponseEntity<>(classMapper.toDto(savedClass), HttpStatus.CREATED);
 	}
 
 	@Override
@@ -63,7 +64,7 @@ public class SimpleClassService implements ClassService {
 		Category category = categoryRepo.findById(dto.getCategoryId()).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
 		clazz.setCategory(category);
 		var savedClass = individualClassRepo.save(clazz);
-		return ResponseEntity.ok(classMapper.toDto(savedClass));
+		return new ResponseEntity<>(classMapper.toDto(savedClass), HttpStatus.CREATED);
 	}
 
 	@Override

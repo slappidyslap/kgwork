@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +53,7 @@ public class SimpleCommentService implements CommentService {
 		comment.setUserId(dto.userId());
 //		comment.setUserId(userRepo.getReferenceById(dto.userId())); FIXME
 		var savedComment = commentRepo.save(comment);
-		return ResponseEntity.ok(commentMapper.toDto(savedComment));
+		return new ResponseEntity<>(commentMapper.toDto(comment), HttpStatus.CREATED);
 	}
 
 	@Override
