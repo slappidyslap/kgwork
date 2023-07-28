@@ -1,5 +1,6 @@
 package kg.musabaev.onlinetutorback.controller;
 
+import jakarta.validation.Valid;
 import kg.musabaev.onlinetutorback.dto.request.NewGroupClassRequest;
 import kg.musabaev.onlinetutorback.dto.request.NewIndividualClassRequest;
 import kg.musabaev.onlinetutorback.dto.request.UpdateGroupClassRequest;
@@ -24,22 +25,22 @@ public class ClassController {
 	private final ClassService classService;
 
 	@PostMapping("/groups")
-	ResponseEntity<NewClassResponse> createGroupClass(@RequestBody NewGroupClassRequest dto) {
+	ResponseEntity<NewClassResponse> createGroupClass(@Valid @RequestBody NewGroupClassRequest dto) {
 		return classService.createGroupClass(dto);
 	}
 
 	@PostMapping("/individuals")
-	ResponseEntity<NewClassResponse> createIndividualClass(@RequestBody NewIndividualClassRequest dto) {
+	ResponseEntity<NewClassResponse> createIndividualClass(@Valid @RequestBody NewIndividualClassRequest dto) {
 		return classService.createIndividualClass(dto);
 	}
 
 	@PutMapping("/groups/{id}")
-	ResponseEntity<Void> updateGroupClass(@PathVariable Long id, @RequestBody UpdateGroupClassRequest dto) {
+	ResponseEntity<Void> updateGroupClass(@PathVariable Long id, @Valid @RequestBody UpdateGroupClassRequest dto) {
 		return classService.updateGroupClass(id, dto);
 	}
 
 	@PutMapping("/individuals/{id}")
-	ResponseEntity<Void> updateIndividualClass(@PathVariable Long id, @RequestBody UpdateIndividualClassRequest dto) {
+	ResponseEntity<Void> updateIndividualClass(@PathVariable Long id, @Valid @RequestBody UpdateIndividualClassRequest dto) {
 		return classService.updateIndividualClass(id, dto);
 	}
 

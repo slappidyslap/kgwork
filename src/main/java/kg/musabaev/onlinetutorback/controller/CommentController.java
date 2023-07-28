@@ -1,5 +1,6 @@
 package kg.musabaev.onlinetutorback.controller;
 
+import jakarta.validation.Valid;
 import kg.musabaev.onlinetutorback.dto.request.DeleteCommentRequest;
 import kg.musabaev.onlinetutorback.dto.request.NewCommentRequest;
 import kg.musabaev.onlinetutorback.dto.request.UpdateCommentRequest;
@@ -26,17 +27,17 @@ public class CommentController {
 	}
 
 	@PostMapping("/comments")
-	ResponseEntity<NewCommentResponse> createComment(@RequestBody NewCommentRequest dto) {
+	ResponseEntity<NewCommentResponse> createComment(@Valid @RequestBody NewCommentRequest dto) {
 		return commentService.createComment(dto);
 	}
 
 	@PatchMapping("/comments/{id}")
-	ResponseEntity<Void> updateComment(@PathVariable long id, @RequestBody UpdateCommentRequest dto) {
+	ResponseEntity<Void> updateComment(@PathVariable long id, @Valid @RequestBody UpdateCommentRequest dto) {
 		return commentService.updateComment(id, dto);
 	}
 
 	@DeleteMapping("/comments/{id}")
-	ResponseEntity<Void> deleteComment(@PathVariable long id, @RequestBody DeleteCommentRequest dto) {
+	ResponseEntity<Void> deleteComment(@PathVariable long id, @Valid @RequestBody DeleteCommentRequest dto) {
 		return commentService.deleteComment(id, dto);
 	}
 }
