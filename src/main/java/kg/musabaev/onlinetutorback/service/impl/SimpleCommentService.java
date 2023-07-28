@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
@@ -35,11 +36,13 @@ public class SimpleCommentService implements CommentService {
 	private final CommentMapper commentMapper;
 
 	@Override
+	@Transactional(readOnly = true)
 	public ResponseEntity<Page<CommentItemView>> getAllCommentsOfClass(long classId, Pageable pageable) {
 		return ResponseEntity.ok(commentRepo.findAllProjectedByBaseClassId(classId, pageable));
 	}
 
 	@Override
+	@Transactional
 	public ResponseEntity<NewCommentResponse> createComment(NewCommentRequest dto) {
 		throwIf(null /*new UserNotFoundException()*/, () -> false /*userRepo.existsById(dto.userId())*/); // FIXME
 		throwIf(new ClassNotFoundException(), () -> baseClassRepository.existsById(dto.classId()));
@@ -53,6 +56,7 @@ public class SimpleCommentService implements CommentService {
 	}
 
 	@Override
+	@Transactional
 	public ResponseEntity<Void> updateComment(long id, UpdateCommentRequest dto) {
 		throwIf(null /*new UserNotFoundException()*/, () -> false /*userRepo.existsById(dto.userId())*/);
 
@@ -68,6 +72,7 @@ public class SimpleCommentService implements CommentService {
 	}
 
 	@Override
+	@Transactional
 	public ResponseEntity<Void> deleteComment(long id, DeleteCommentRequest dto) {
 		throwIf(new CommentNotFoundException(), () -> commentRepo.existsById(id));
 		throwIf(new ResponseStatusException(UNAUTHORIZED), () -> id != dto.userId()); // FIXME

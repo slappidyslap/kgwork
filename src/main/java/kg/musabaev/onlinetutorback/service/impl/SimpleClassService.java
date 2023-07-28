@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
@@ -40,6 +41,7 @@ public class SimpleClassService implements ClassService {
 	private final CategoryRepo categoryRepo;
 
 	@Override
+	@Transactional
 	public ResponseEntity<NewClassResponse> createGroupClass(NewGroupClassRequest dto) {
 		throwConflictIf(() -> groupClassRepo.existsByTitle(dto.getTitle()));
 		throwConflictIf(() -> individualClassRepo.existsByTitle(dto.getTitle()));
@@ -52,6 +54,7 @@ public class SimpleClassService implements ClassService {
 	}
 
 	@Override
+	@Transactional
 	public ResponseEntity<NewClassResponse> createIndividualClass(NewIndividualClassRequest dto) {
 		throwConflictIf(() -> individualClassRepo.existsByTitle(dto.getTitle()));
 		throwConflictIf(() -> groupClassRepo.existsByTitle(dto.getTitle()));
@@ -64,6 +67,7 @@ public class SimpleClassService implements ClassService {
 	}
 
 	@Override
+	@Transactional
 	public ResponseEntity<Void> updateGroupClass(Long id, UpdateGroupClassRequest dto) {
 		throwConflictIf(() -> groupClassRepo.existsByTitleAndIdNot(dto.getTitle(), id));
 		throwConflictIf(() -> individualClassRepo.existsByTitleAndIdNot(dto.getTitle(), id));
@@ -82,6 +86,7 @@ public class SimpleClassService implements ClassService {
 	}
 
 	@Override
+	@Transactional
 	public ResponseEntity<Void> updateIndividualClass(Long id, UpdateIndividualClassRequest dto) {
 		throwConflictIf(() -> individualClassRepo.existsByTitleAndIdNot(dto.getTitle(), id));
 		throwConflictIf(() -> groupClassRepo.existsByTitleAndIdNot(dto.getTitle(), id));
@@ -100,6 +105,7 @@ public class SimpleClassService implements ClassService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public ResponseEntity<Page<GroupClassItemView>> getAllGroupClasses(long categoryId, Pageable pageable) {
 		if (categoryId == 0)
 			return ResponseEntity.ok(groupClassRepo.findAllProjectedBy(pageable));
@@ -107,6 +113,7 @@ public class SimpleClassService implements ClassService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public ResponseEntity<Page<IndividualClassItemView>> getAllIndividualClasses(long categoryId, Pageable pageable) {
 		if (categoryId == 0)
 			return ResponseEntity.ok(individualClassRepo.findAllProjectedBy(pageable));
@@ -114,12 +121,14 @@ public class SimpleClassService implements ClassService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public ResponseEntity<GroupClassItemView> getGroupClassById(long id) {
 		var clazz = groupClassRepo.findProjectedById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
 		return ResponseEntity.ok(clazz);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public ResponseEntity<IndividualClassItemView> getIndividualClassById(long id) {
 		var clazz = individualClassRepo.findProjectedById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
 		return ResponseEntity.ok(clazz);
