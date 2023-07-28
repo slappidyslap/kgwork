@@ -16,8 +16,6 @@ databaseChangeLog:
               - column:
                   name: category_id
                   type: BIGINT
-                  defaultValue: 1
                   constraints:
-                    nullable: false
                     foreignKeyName: base_classes_category_id__categories_id_fk
                     references: categories(id)
