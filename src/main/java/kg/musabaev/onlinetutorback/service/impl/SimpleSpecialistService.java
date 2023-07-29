@@ -33,12 +33,16 @@ public class SimpleSpecialistService implements SpecialistService {
 	@Override
 	@Transactional
 	public ResponseEntity<RegisterUserResponse> registerSpecialist(RegisterSpecialistRequest dto) {
-		if (userRepo.existsByEmail(dto.getEmail()))
-			throw new ResponseStatusException(CONFLICT);
+		throwConflictIf(() -> userRepo.existsByEmail(dto.getEmail()));
+		throwConflictIf(() -> userRepo.existsByPhoneNumber(dto.getPhoneNumber()));
 
 		var newSpecialist = specialistMapper.toModel(dto);
 		newSpecialist.setPassword(passwordEncoder.encode(dto.getPassword()));
 		newSpecialist.setRole(User.Role.SPECIALIST);
 		return ResponseEntity.ok(specialistMapper.toDto(specialistRepo.save(newSpecialist)));
+	}
+
+	public void throwConflictIf(Supplier<Boolean> function) {
+		if (function.get()) throw new ResponseStatusException(CONFLICT);
 	}
 }
