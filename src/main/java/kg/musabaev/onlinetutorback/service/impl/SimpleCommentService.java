@@ -46,7 +46,7 @@ public class SimpleCommentService implements CommentService {
 	@Transactional
 	public ResponseEntity<NewCommentResponse> createComment(NewCommentRequest dto) {
 		throwIf(null /*new UserNotFoundException()*/, () -> false /*userRepo.existsById(dto.userId())*/); // FIXME
-		throwIf(new ClassNotFoundException(), () -> baseClassRepository.existsById(dto.classId()));
+		throwIf(new ClassNotFoundException(), () -> !baseClassRepository.existsById(dto.classId()));
 
 		var comment = commentMapper.toModel(dto);
 		comment.setBaseClass(baseClassRepository.getReferenceById(dto.classId()));
@@ -75,7 +75,7 @@ public class SimpleCommentService implements CommentService {
 	@Override
 	@Transactional
 	public ResponseEntity<Void> deleteComment(long id, DeleteCommentRequest dto) {
-		throwIf(new CommentNotFoundException(), () -> commentRepo.existsById(id));
+		throwIf(new CommentNotFoundException(), () -> !commentRepo.existsById(id));
 		throwIf(new ResponseStatusException(UNAUTHORIZED), () -> id != dto.userId()); // FIXME
 
 		commentRepo.deleteById(id);
