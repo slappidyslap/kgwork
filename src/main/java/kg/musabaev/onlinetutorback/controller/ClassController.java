@@ -9,7 +9,9 @@ import kg.musabaev.onlinetutorback.dto.response.NewClassResponse;
 import kg.musabaev.onlinetutorback.repository.projection.GroupClassItemView;
 import kg.musabaev.onlinetutorback.repository.projection.IndividualClassItemView;
 import kg.musabaev.onlinetutorback.service.ClassService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,9 +22,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/classes")
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ClassController {
 
-	private final ClassService classService;
+	ClassService classService;
 
 	@PostMapping("/groups")
 	ResponseEntity<NewClassResponse> createGroupClass(@Valid @RequestBody NewGroupClassRequest dto) {

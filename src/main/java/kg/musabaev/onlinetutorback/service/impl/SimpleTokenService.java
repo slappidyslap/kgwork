@@ -10,7 +10,9 @@ import kg.musabaev.onlinetutorback.model.RefreshToken;
 import kg.musabaev.onlinetutorback.repository.RefreshTokenRepo;
 import kg.musabaev.onlinetutorback.repository.UserRepo;
 import kg.musabaev.onlinetutorback.service.TokenService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpHeaders;
@@ -30,19 +32,20 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Service
 @Primary
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class SimpleTokenService implements TokenService {
 
-	private final RefreshTokenRepo refreshTokenRepo;
-	private final UserRepo userRepo;
+	final RefreshTokenRepo refreshTokenRepo;
+	final UserRepo userRepo;
 
 	@Value("${app.security.access-token-expiration-ms}")
-	private Long accessTokenExpirationMs;
+	Long accessTokenExpirationMs;
 	@Value("${app.security.refresh-token-expiration-ms}")
-	private Long refreshTokenExpirationMs;
+	Long refreshTokenExpirationMs;
 	@Value("${app.security.secret-key}")
-	private char[] secretKeyAsCharArray;
+	char[] secretKeyAsCharArray;
 
-	private Key secretKey;
+	Key secretKey;
 
 	@PostConstruct
 	private void init() {

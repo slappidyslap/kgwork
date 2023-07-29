@@ -15,7 +15,9 @@ import kg.musabaev.onlinetutorback.repository.IndividualClassRepo;
 import kg.musabaev.onlinetutorback.repository.projection.GroupClassItemView;
 import kg.musabaev.onlinetutorback.repository.projection.IndividualClassItemView;
 import kg.musabaev.onlinetutorback.service.ClassService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,12 +36,13 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Service
 @RequiredArgsConstructor
 @Primary
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SimpleClassService implements ClassService {
 
-	private final ClassMapper classMapper;
-	private final GroupClassRepo groupClassRepo;
-	private final IndividualClassRepo individualClassRepo;
-	private final CategoryRepo categoryRepo;
+	ClassMapper classMapper;
+	GroupClassRepo groupClassRepo;
+	IndividualClassRepo individualClassRepo;
+	CategoryRepo categoryRepo;
 
 	@Override
 	@Transactional

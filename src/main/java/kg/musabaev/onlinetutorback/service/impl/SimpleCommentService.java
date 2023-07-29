@@ -12,7 +12,9 @@ import kg.musabaev.onlinetutorback.repository.BaseClassRepository;
 import kg.musabaev.onlinetutorback.repository.CommentRepo;
 import kg.musabaev.onlinetutorback.repository.projection.CommentItemView;
 import kg.musabaev.onlinetutorback.service.CommentService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,11 +32,12 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 @Service
 @Primary
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SimpleCommentService implements CommentService {
 
-	private final CommentRepo commentRepo;
-	private final BaseClassRepository baseClassRepository;
-	private final CommentMapper commentMapper;
+	CommentRepo commentRepo;
+	BaseClassRepository baseClassRepository;
+	CommentMapper commentMapper;
 
 	@Override
 	@Transactional(readOnly = true)
