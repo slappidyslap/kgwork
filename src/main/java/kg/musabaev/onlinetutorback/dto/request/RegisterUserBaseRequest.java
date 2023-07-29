@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import kg.musabaev.onlinetutorback.OnlineTutorBackApplication;
+import kg.musabaev.onlinetutorback.Application;
 import kg.musabaev.onlinetutorback.model.User;
 import kg.musabaev.onlinetutorback.util.validator.UrlOrNull;
 import lombok.AccessLevel;
@@ -34,7 +34,7 @@ public class RegisterUserBaseRequest {
 	String password;
 	@UrlOrNull
 	@JsonSetter(nulls = Nulls.SKIP)
-	String avatarUrl = OnlineTutorBackApplication.defaultAvatarUrl;
+	String avatarUrl = Application.defaultAvatarUrl;
 	@JsonSetter(nulls = Nulls.SKIP)
 	String region = "";
 	@JsonSetter(nulls = Nulls.SKIP)

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
-import kg.musabaev.onlinetutorback.OnlineTutorBackApplication;
+import kg.musabaev.onlinetutorback.Application;
 import kg.musabaev.onlinetutorback.util.validator.UrlOrNull;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -31,5 +31,5 @@ public class UpdateClassBaseRequest {
 	Integer price;
 	@JsonSetter(nulls = Nulls.SKIP)
 	@UrlOrNull
-	String coverUrl = OnlineTutorBackApplication.defaultCoverUrl;
+	String coverUrl = Application.defaultCoverUrl;
 }
