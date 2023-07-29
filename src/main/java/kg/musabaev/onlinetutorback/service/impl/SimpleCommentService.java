@@ -8,7 +8,7 @@ import kg.musabaev.onlinetutorback.exception.ClassNotFoundException;
 import kg.musabaev.onlinetutorback.exception.CommentNotFoundException;
 import kg.musabaev.onlinetutorback.mapper.CommentMapper;
 import kg.musabaev.onlinetutorback.model.Comment;
-import kg.musabaev.onlinetutorback.repository.BaseClassRepository;
+import kg.musabaev.onlinetutorback.repository.BaseClassRepo;
 import kg.musabaev.onlinetutorback.repository.CommentRepo;
 import kg.musabaev.onlinetutorback.repository.projection.CommentItemView;
 import kg.musabaev.onlinetutorback.service.CommentService;
@@ -36,7 +36,7 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 public class SimpleCommentService implements CommentService {
 
 	CommentRepo commentRepo;
-	BaseClassRepository baseClassRepository;
+	BaseClassRepo baseClassRepo;
 	CommentMapper commentMapper;
 
 	@Override
