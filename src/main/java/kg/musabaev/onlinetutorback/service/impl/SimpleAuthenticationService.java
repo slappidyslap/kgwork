@@ -67,7 +67,7 @@ public class SimpleAuthenticationService implements AuthenticationService {
 		return new AuthenticateOrRefreshResponse(
 				tokenService.generateAccessToken(user.getUsername()),
 				tokenService.generateRefreshToken(user.getId()),
-				userMapper.toAuthResponseUserDto(user)
+				userMapper.toDto(user)
 		);
 	}
 }
