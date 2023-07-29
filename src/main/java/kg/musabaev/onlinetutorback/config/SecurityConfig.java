@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,15 +15,15 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
 @Configuration
 @EnableMethodSecurity
@@ -46,31 +45,25 @@ public class SecurityConfig {
 				.csrf().disable()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
-				.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-				.and()
+				.exceptionHandling(customizer -> customizer
+						.accessDeniedHandler(new AccessDeniedHandlerImpl())
+						.authenticationEntryPoint(new BasicAuthenticationEntryPoint()))
 				.authenticationProvider(authenticationProvider())
 				.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
-				.authorizeHttpRequests()
-				.requestMatchers(HttpMethod.POST, "/users/specialists").permitAll()
-				.requestMatchers(HttpMethod.POST, "/users/students").permitAll()
-				.requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
-				.requestMatchers(HttpMethod.GET, "/classes/**").permitAll()
-				.requestMatchers("/auth/**").permitAll()
-				.anyRequest().authenticated()
-				.and()
+				.authorizeHttpRequests(customizer -> customizer
+						.requestMatchers(HttpMethod.POST, "/users/specialists").permitAll()
+						.requestMatchers(HttpMethod.POST, "/users/students").permitAll()
+						.requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
+						.requestMatchers(HttpMethod.GET, "/classes/**").permitAll()
+						.requestMatchers("/auth/**").permitAll()
+						.requestMatchers("/api-docs/**", "/swagger-ui/**", "/actuator/**").permitAll()
+						.anyRequest().authenticated())
 				.build();
 	}
 
 	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return web -> web
-				.ignoring()
-				.requestMatchers("/api-docs/**", "/swagger-ui/**", "/actuator/**");
-	}
-
-	@Bean
 	public AuthenticationProvider authenticationProvider() {
-		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+		var daoAuthenticationProvider = new DaoAuthenticationProvider();
 		daoAuthenticationProvider.setUserDetailsService(userDetailsService());
 		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
 		return daoAuthenticationProvider;
