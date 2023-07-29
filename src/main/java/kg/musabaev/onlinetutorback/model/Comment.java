@@ -30,6 +30,7 @@ public class Comment {
 	@JoinColumn(name = "base_class_id")
 	BaseClass baseClass;
 	@Builder.Default
+	@Column(nullable = false)
 	LocalDate uploadedDate = LocalDate.now();
 
 	@EqualsAndHashCode.Include
