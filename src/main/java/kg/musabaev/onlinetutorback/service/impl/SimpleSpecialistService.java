@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
@@ -30,6 +31,7 @@ public class SimpleSpecialistService implements SpecialistService {
 	PasswordEncoder passwordEncoder;
 
 	@Override
+	@Transactional
 	public ResponseEntity<RegisterUserResponse> registerSpecialist(RegisterSpecialistRequest dto) {
 		if (userRepo.existsByEmail(dto.getEmail()))
 			throw new ResponseStatusException(CONFLICT);

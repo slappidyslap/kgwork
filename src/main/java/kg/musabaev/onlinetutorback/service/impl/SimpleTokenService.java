@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.CharBuffer;
@@ -59,6 +60,7 @@ public class SimpleTokenService implements TokenService {
 	}
 
 	@Override
+	@Transactional
 	public String generateRefreshToken(Long userId) {
 		if (!userRepo.existsById(userId)) throw new ResponseStatusException(NOT_FOUND);
 
