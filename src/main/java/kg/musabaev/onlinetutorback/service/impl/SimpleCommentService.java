@@ -56,7 +56,7 @@ public class SimpleCommentService implements CommentService {
 		comment.setUserId(dto.userId());
 //		comment.setUserId(userRepo.getReferenceById(dto.userId())); FIXME
 		var savedComment = commentRepo.save(comment);
-		return new ResponseEntity<>(commentMapper.toDto(comment), HttpStatus.CREATED);
+		return new ResponseEntity<>(commentMapper.toDto(savedComment), HttpStatus.CREATED);
 	}
 
 	@Override
