@@ -14,6 +14,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,16 +31,19 @@ public class CommentController {
 	}
 
 	@PostMapping("/comments")
+	@PreAuthorize("hasRole('STUDENT')")
 	ResponseEntity<NewCommentResponse> createComment(@Valid @RequestBody NewCommentRequest dto) {
 		return commentService.createComment(dto);
 	}
 
 	@PatchMapping("/comments/{id}")
+	@PreAuthorize("hasRole('STUDENT')")
 	ResponseEntity<Void> updateComment(@PathVariable long id, @Valid @RequestBody UpdateCommentRequest dto) {
 		return commentService.updateComment(id, dto);
 	}
 
 	@DeleteMapping("/comments/{id}")
+	@PreAuthorize("hasRole('STUDENT')")
 	ResponseEntity<Void> deleteComment(@PathVariable long id, @Valid @RequestBody DeleteCommentRequest dto) {
 		return commentService.deleteComment(id, dto);
 	}

@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,21 +29,25 @@ public class ClassController {
 	ClassService classService;
 
 	@PostMapping("/groups")
+	@PreAuthorize("hasRole('SPECIALIST')")
 	ResponseEntity<NewClassResponse> createGroupClass(@Valid @RequestBody NewGroupClassRequest dto) {
 		return classService.createGroupClass(dto);
 	}
 
 	@PostMapping("/individuals")
+	@PreAuthorize("hasRole('SPECIALIST')")
 	ResponseEntity<NewClassResponse> createIndividualClass(@Valid @RequestBody NewIndividualClassRequest dto) {
 		return classService.createIndividualClass(dto);
 	}
 
 	@PutMapping("/groups/{id}")
+	@PreAuthorize("hasRole('SPECIALIST')")
 	ResponseEntity<Void> updateGroupClass(@PathVariable Long id, @Valid @RequestBody UpdateGroupClassRequest dto) {
 		return classService.updateGroupClass(id, dto);
 	}
 
 	@PutMapping("/individuals/{id}")
+	@PreAuthorize("hasRole('SPECIALIST')")
 	ResponseEntity<Void> updateIndividualClass(@PathVariable Long id, @Valid @RequestBody UpdateIndividualClassRequest dto) {
 		return classService.updateIndividualClass(id, dto);
 	}
