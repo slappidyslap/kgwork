@@ -41,7 +41,7 @@ public class SimpleSpecialistService implements SpecialistService {
 
 		var newSpecialist = specialistMapper.toModel(dto);
 		newSpecialist.setPassword(passwordEncoder.encode(dto.getPassword()));
-		newSpecialist.setRole(User.Role.SPECIALIST);
+		newSpecialist.setRole(User.Role.ROLE_SPECIALIST);
 		return new ResponseEntity<>(specialistMapper.toDto(specialistRepo.save(newSpecialist)), CREATED);
 	}
 

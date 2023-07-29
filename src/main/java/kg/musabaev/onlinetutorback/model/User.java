@@ -90,6 +90,6 @@ public class User implements UserDetails {
 	}
 
 	public enum Role {
-		SPECIALIST, STUDENT
+		ROLE_SPECIALIST, ROLE_STUDENT
 	}
 }

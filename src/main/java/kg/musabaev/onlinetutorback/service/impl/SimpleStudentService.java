@@ -41,7 +41,7 @@ public class SimpleStudentService implements StudentService {
 
 		var newStudent = studentMapper.toModel(dto);
 		newStudent.setPassword(passwordEncoder.encode(dto.getPassword()));
-		newStudent.setRole(User.Role.STUDENT);
+		newStudent.setRole(User.Role.ROLE_STUDENT);
 		return new ResponseEntity<>(studentMapper.toDto(studentRepo.save(newStudent)), CREATED);
 	}
 
