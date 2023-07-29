@@ -17,7 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.function.Supplier;
+
 import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @Service
 @Primary
@@ -39,7 +42,7 @@ public class SimpleSpecialistService implements SpecialistService {
 		var newSpecialist = specialistMapper.toModel(dto);
 		newSpecialist.setPassword(passwordEncoder.encode(dto.getPassword()));
 		newSpecialist.setRole(User.Role.SPECIALIST);
-		return ResponseEntity.ok(specialistMapper.toDto(specialistRepo.save(newSpecialist)));
+		return new ResponseEntity<>(specialistMapper.toDto(specialistRepo.save(newSpecialist)), CREATED);
 	}
 
 	public void throwConflictIf(Supplier<Boolean> function) {

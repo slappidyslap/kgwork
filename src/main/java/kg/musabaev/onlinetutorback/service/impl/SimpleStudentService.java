@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.function.Supplier;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @Service
 @Primary
@@ -41,7 +42,7 @@ public class SimpleStudentService implements StudentService {
 		var newStudent = studentMapper.toModel(dto);
 		newStudent.setPassword(passwordEncoder.encode(dto.getPassword()));
 		newStudent.setRole(User.Role.STUDENT);
-		return ResponseEntity.ok(studentMapper.toDto(studentRepo.save(newStudent)));
+		return new ResponseEntity<>(studentMapper.toDto(studentRepo.save(newStudent)), CREATED);
 	}
 
 	public void throwConflictIf(Supplier<Boolean> function) {
