@@ -28,6 +28,7 @@ public class RestApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler({ClassNotFoundException.class, CommentNotFoundException.class})
+	@ResponseStatus(HttpStatus.NOT_FOUND)
 	Map<String, String> handleNotFound(Exception e) {
 		return Map.of("exception", e.getMessage());
 	}
