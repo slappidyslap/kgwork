@@ -20,12 +20,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.*;
 
 @Configuration
 @EnableMethodSecurity
@@ -49,7 +48,7 @@ public class SecurityConfig {
 				.and()
 				.exceptionHandling(customizer -> customizer
 						.accessDeniedHandler((req, res, e) -> res.setStatus(FORBIDDEN.value()))
-						.authenticationEntryPoint(new HttpStatusEntryPoint(UNAUTHORIZED)))
+						.authenticationEntryPoint(handle500statusAuthEntryPoint()))
 				.authenticationProvider(authenticationProvider())
 				.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
 				.authorizeHttpRequests(customizer -> customizer
@@ -61,6 +60,15 @@ public class SecurityConfig {
 						.requestMatchers("/api-docs/**", "/swagger-ui/**", "/actuator/**").permitAll()
 						.anyRequest().authenticated())
 				.build();
+	}
+
+	@Bean
+	public AuthenticationEntryPoint handle500statusAuthEntryPoint() {
+		return (req, res, e) -> {
+			if (res.getStatus() == INTERNAL_SERVER_ERROR.value())
+				res.setStatus(INTERNAL_SERVER_ERROR.value());
+			else res.setStatus(UNAUTHORIZED.value());
+		};
 	}
 
 	@Bean
