@@ -13,7 +13,7 @@ public interface CommentMapper {
 
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "baseClass", ignore = true)
-	@Mapping(target = "userId", ignore = true) // FIXME
+	@Mapping(target = "author", ignore = true)
 	@Mapping(target = "uploadedDate", ignore = true)
 	Comment toModel(NewCommentRequest dto);
 
@@ -21,7 +21,7 @@ public interface CommentMapper {
 
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "baseClass", ignore = true)
-	@Mapping(target = "userId", ignore = true) // FIXME
+	@Mapping(target = "author", ignore = true)
 	@Mapping(target = "uploadedDate", ignore = true)
 	void update(UpdateCommentRequest dto, @MappingTarget Comment model);
 }

@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: rename-column-in-base-classes
+      author: Eld
+      changes:
+          - renameColumn:
+              tableName: base_classes
+              oldColumnName: specialist_id
+              newColumnName: author_id
+  - changeSet:
+      id: rename-column-in-comments
+      author: Eld
+      changes:
+        - renameColumn:
+            tableName: comments
+            oldColumnName: user_id
+            newColumnName: author_id
+  - changeSet:
+      id: add-foreign-key-in-base-classes
+      author: Eld
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: base_classes_author_id
+            baseTableName: base_classes
+            baseColumnNames: author_id
+            referencedTableName: users
+            referencedColumnNames: id
+  - changeSet:
+      id: add-foreign-key-in-comments
+      author: Eld
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: comments_author_id
+            baseTableName: comments
+            baseColumnNames: author_id
+            referencedTableName: users
+            referencedColumnNames: id

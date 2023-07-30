@@ -1,7 +1,6 @@
 package kg.musabaev.onlinetutorback.controller;
 
 import jakarta.validation.Valid;
-import kg.musabaev.onlinetutorback.dto.request.DeleteCommentRequest;
 import kg.musabaev.onlinetutorback.dto.request.NewCommentRequest;
 import kg.musabaev.onlinetutorback.dto.request.UpdateCommentRequest;
 import kg.musabaev.onlinetutorback.dto.response.NewCommentResponse;
@@ -44,7 +43,7 @@ public class CommentController {
 
 	@DeleteMapping("/comments/{id}")
 	@PreAuthorize("hasRole('STUDENT')")
-	ResponseEntity<Void> deleteComment(@PathVariable long id, @Valid @RequestBody DeleteCommentRequest dto) {
-		return commentService.deleteComment(id, dto);
+	ResponseEntity<Void> deleteComment(@PathVariable long id) {
+		return commentService.deleteComment(id);
 	}
 }

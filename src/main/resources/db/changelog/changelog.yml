@@ -23,3 +23,6 @@ databaseChangeLog:
   - include:
       file: changeset/create-refresh-tokens-table.yml
       relativeToChangelogFile: true
+  - include:
+      file: changeset/add-foreign-key-in-base-classes-and-comments-table.yml
+      relativeToChangelogFile: true

@@ -1,6 +1,5 @@
 package kg.musabaev.onlinetutorback.service.impl;
 
-import kg.musabaev.onlinetutorback.dto.request.DeleteCommentRequest;
 import kg.musabaev.onlinetutorback.dto.request.NewCommentRequest;
 import kg.musabaev.onlinetutorback.dto.request.UpdateCommentRequest;
 import kg.musabaev.onlinetutorback.dto.response.NewCommentResponse;
@@ -8,6 +7,7 @@ import kg.musabaev.onlinetutorback.exception.ClassNotFoundException;
 import kg.musabaev.onlinetutorback.exception.CommentNotFoundException;
 import kg.musabaev.onlinetutorback.mapper.CommentMapper;
 import kg.musabaev.onlinetutorback.model.Comment;
+import kg.musabaev.onlinetutorback.model.Student;
 import kg.musabaev.onlinetutorback.repository.BaseClassRepo;
 import kg.musabaev.onlinetutorback.repository.CommentRepo;
 import kg.musabaev.onlinetutorback.repository.projection.CommentItemView;
@@ -20,14 +20,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 import java.util.function.Supplier;
-
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Service
 @Primary
@@ -39,6 +37,7 @@ public class SimpleCommentService implements CommentService {
 	BaseClassRepo baseClassRepo;
 	CommentMapper commentMapper;
 
+
 	@Override
 	@Transactional(readOnly = true)
 	public ResponseEntity<Page<CommentItemView>> getAllCommentsOfClass(long classId, Pageable pageable) {
@@ -48,13 +47,12 @@ public class SimpleCommentService implements CommentService {
 	@Override
 	@Transactional
 	public ResponseEntity<NewCommentResponse> createComment(NewCommentRequest dto) {
-		throwIf(null /*new UserNotFoundException()*/, () -> false /*userRepo.existsById(dto.userId())*/); // FIXME
-		throwIf(new ClassNotFoundException(), () -> !baseClassRepository.existsById(dto.classId()));
+		throwIf(new ClassNotFoundException(), () -> !baseClassRepo.existsById(dto.classId()));
 
 		var comment = commentMapper.toModel(dto);
-		comment.setBaseClass(baseClassRepository.getReferenceById(dto.classId()));
-		comment.setUserId(dto.userId());
-//		comment.setUserId(userRepo.getReferenceById(dto.userId())); FIXME
+		comment.setBaseClass(baseClassRepo.getReferenceById(dto.classId()));
+		comment.setAuthor(getAuthenticatedUser());
+
 		var savedComment = commentRepo.save(comment);
 		return new ResponseEntity<>(commentMapper.toDto(savedComment), HttpStatus.CREATED);
 	}
@@ -62,12 +60,9 @@ public class SimpleCommentService implements CommentService {
 	@Override
 	@Transactional
 	public ResponseEntity<Void> updateComment(long id, UpdateCommentRequest dto) {
-		throwIf(null /*new UserNotFoundException()*/, () -> false /*userRepo.existsById(dto.userId())*/);
 
 		Optional<Comment> comment = commentRepo.findById(id);
 		comment.ifPresent(c -> {
-			throwIf(new ResponseStatusException(UNAUTHORIZED), () -> !dto.userId().equals(c.getUserId())); // FIXME
-
 			commentMapper.update(dto, c);
 			commentRepo.save(c);
 		});
@@ -77,9 +72,8 @@ public class SimpleCommentService implements CommentService {
 
 	@Override
 	@Transactional
-	public ResponseEntity<Void> deleteComment(long id, DeleteCommentRequest dto) {
+	public ResponseEntity<Void> deleteComment(long id) {
 		throwIf(new CommentNotFoundException(), () -> !commentRepo.existsById(id));
-		throwIf(new ResponseStatusException(UNAUTHORIZED), () -> id != dto.userId()); // FIXME
 
 		commentRepo.deleteById(id);
 		return ResponseEntity.noContent().build();
@@ -87,5 +81,9 @@ public class SimpleCommentService implements CommentService {
 
 	public void throwIf(RuntimeException e, Supplier<Boolean> function) {
 		if (function.get()) throw e;
+	}
+
+	public Student getAuthenticatedUser() {
+		return ((Student) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 	}
 }

@@ -1,6 +1,5 @@
 package kg.musabaev.onlinetutorback.service;
 
-import kg.musabaev.onlinetutorback.dto.request.DeleteCommentRequest;
 import kg.musabaev.onlinetutorback.dto.request.NewCommentRequest;
 import kg.musabaev.onlinetutorback.dto.request.UpdateCommentRequest;
 import kg.musabaev.onlinetutorback.dto.response.NewCommentResponse;
@@ -17,5 +16,5 @@ public interface CommentService {
 
 	ResponseEntity<Void> updateComment(long id, UpdateCommentRequest dto);
 
-	ResponseEntity<Void> deleteComment(long id, DeleteCommentRequest dto);
+	ResponseEntity<Void> deleteComment(long id);
 }

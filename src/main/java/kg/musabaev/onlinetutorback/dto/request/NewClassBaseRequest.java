@@ -26,9 +26,6 @@ public abstract class NewClassBaseRequest {
 	@NotNull
 	@Positive
 	Integer categoryId;
-	@Positive
-	@NotNull
-	Long specialistId;
 	@PositiveOrZero
 	@NotNull
 	Integer price;

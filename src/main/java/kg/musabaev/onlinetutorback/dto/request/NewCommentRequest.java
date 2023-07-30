@@ -7,9 +7,6 @@ import jakarta.validation.constraints.Positive;
 public record NewCommentRequest(
 		@NotNull
 		@Positive
-		Long userId,
-		@NotNull
-		@Positive
 		Long classId,
 		@NotNull
 		@NotBlank

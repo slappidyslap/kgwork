@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Table(name = "comments")
 @Getter
 @Setter
-@ToString(exclude = {"baseClass", "userId"})
+@ToString(exclude = {"baseClass", "author"}) // FIXME
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,8 +21,9 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	Long id;
-	@Column(nullable = false)
-	Long userId; // FIXME
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "author_id", nullable = false)
+	Student author;
 	@Column(nullable = false, length = 500)
 	@EqualsAndHashCode.Include
 	String body;
@@ -33,7 +34,7 @@ public class Comment {
 	@Column(nullable = false)
 	LocalDate uploadedDate = LocalDate.now();
 
-	@EqualsAndHashCode.Include
+	@EqualsAndHashCode.Include // FIXME
 	private String getClassTitle() {
 		return baseClass.getTitle();
 	}

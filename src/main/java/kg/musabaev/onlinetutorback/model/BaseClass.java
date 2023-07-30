@@ -13,11 +13,11 @@ import java.time.LocalDate;
 @DiscriminatorColumn(name = "class_type", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
-@ToString(exclude = {"specialistId"})
+@ToString(exclude = {"author"})
 @SuperBuilder
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode(of = {"specialistId", "title"})
+@EqualsAndHashCode(of = {"author", "title"}) // FIXME
 public class BaseClass {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,9 @@ public class BaseClass {
 	@Column(nullable = false, length = 500)
 	@Builder.Default
 	String description = "";
-	Long specialistId; // FIXME
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "author_id", nullable = false)
+	Specialist author;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id")
 	Category category;
