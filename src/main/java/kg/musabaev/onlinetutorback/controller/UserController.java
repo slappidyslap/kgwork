@@ -1,9 +1,10 @@
 package kg.musabaev.onlinetutorback.controller;
 
 import jakarta.validation.Valid;
+import kg.musabaev.onlinetutorback.dto.request.RegisterSpecialistRequest;
 import kg.musabaev.onlinetutorback.dto.request.RegisterStudentRequest;
 import kg.musabaev.onlinetutorback.dto.response.RegisterUserResponse;
-import kg.musabaev.onlinetutorback.service.StudentService;
+import kg.musabaev.onlinetutorback.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,15 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users/students")
+@RequestMapping("/users")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class StudentController {
+public class UserController {
 
-	StudentService studentService;
+	UserService userService;
 
-	@PostMapping
-	ResponseEntity<RegisterUserResponse> registerStudent(@Valid @RequestBody RegisterStudentRequest dto) {
-		return studentService.registerStudent(dto);
+	@PostMapping("/specialists")
+	ResponseEntity<RegisterUserResponse> registerSpecialist(@Valid @RequestBody RegisterSpecialistRequest dto) {
+		return userService.registerSpecialist(dto);
 	}
 
+	@PostMapping("/students")
+	ResponseEntity<RegisterUserResponse> registerStudent(@Valid @RequestBody RegisterStudentRequest dto) {
+		return userService.registerStudent(dto);
+	}
 }

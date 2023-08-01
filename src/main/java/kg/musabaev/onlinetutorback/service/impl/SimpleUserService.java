@@ -1,12 +1,15 @@
 package kg.musabaev.onlinetutorback.service.impl;
 
+import kg.musabaev.onlinetutorback.dto.request.RegisterSpecialistRequest;
 import kg.musabaev.onlinetutorback.dto.request.RegisterStudentRequest;
 import kg.musabaev.onlinetutorback.dto.response.RegisterUserResponse;
+import kg.musabaev.onlinetutorback.mapper.SpecialistMapper;
 import kg.musabaev.onlinetutorback.mapper.StudentMapper;
 import kg.musabaev.onlinetutorback.model.User;
+import kg.musabaev.onlinetutorback.repository.SpecialistRepo;
 import kg.musabaev.onlinetutorback.repository.StudentRepo;
 import kg.musabaev.onlinetutorback.repository.UserRepo;
-import kg.musabaev.onlinetutorback.service.StudentService;
+import kg.musabaev.onlinetutorback.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,12 +29,25 @@ import static org.springframework.http.HttpStatus.CREATED;
 @Primary
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class SimpleStudentService implements StudentService {
+public class SimpleUserService implements UserService {
 
 	UserRepo userRepo;
 	StudentRepo studentRepo;
 	StudentMapper studentMapper;
+	SpecialistRepo specialistRepo;
+	SpecialistMapper specialistMapper;
 	PasswordEncoder passwordEncoder;
+
+	@Override
+	public ResponseEntity<RegisterUserResponse> registerSpecialist(RegisterSpecialistRequest dto) {
+		throwConflictIf(() -> userRepo.existsByEmail(dto.getEmail()));
+		throwConflictIf(() -> userRepo.existsByPhoneNumber(dto.getPhoneNumber()));
+
+		var newSpecialist = specialistMapper.toModel(dto);
+		newSpecialist.setPassword(passwordEncoder.encode(dto.getPassword()));
+		newSpecialist.setRole(User.Role.ROLE_SPECIALIST);
+		return new ResponseEntity<>(specialistMapper.toDto(specialistRepo.save(newSpecialist)), CREATED);
+	}
 
 	@Override
 	@Transactional
