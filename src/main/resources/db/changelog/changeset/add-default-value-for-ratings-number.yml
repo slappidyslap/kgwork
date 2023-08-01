@@ -1,0 +1,9 @@
+databaseChangeLog:
+  id: add-default-value-for-ratings-number
+  author: Eld
+  changes:
+    - addDefaultValue:
+        tableName: specialists
+        columnName: ratings_number
+        columnDataType: INT
+        defaultValue: 0
