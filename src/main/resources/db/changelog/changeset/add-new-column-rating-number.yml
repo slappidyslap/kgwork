@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-new-column-rating-number
+      author: Eld
+      changes:
+        - addColumn:
+            tableName: specialists
+            column:
+              name: ratings_number
+              type: INT
+              constraints:
+                nullable: false
