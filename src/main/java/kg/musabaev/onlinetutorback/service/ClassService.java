@@ -27,4 +27,8 @@ public interface ClassService {
 	ResponseEntity<GroupClassItemView> getGroupClassById(long id);
 
 	ResponseEntity<IndividualClassItemView> getIndividualClassById(long id);
+
+	ResponseEntity<Void> deleteGroupClass(long id);
+
+	ResponseEntity<Void> deleteIndividualClass(long id);
 }

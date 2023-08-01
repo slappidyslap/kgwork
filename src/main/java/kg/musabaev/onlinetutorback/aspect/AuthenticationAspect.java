@@ -34,7 +34,9 @@ public class AuthenticationAspect {
 
 	@Before("""
 			classController() && execution(* updateGroupClass(..)) ||
-			classController() && execution(* updateIndividualClass(..))""")
+			classController() && execution(* updateIndividualClass(..)) ||
+			classController() && execution(* deleteGroupClass(..)) ||
+			classController() && execution(* deleteIndividualClass(..))""")
 	void beforeMethodsInClassControllerVerifyAuthUserIsAuthor(JoinPoint jp) {
 		if (isNotAuthenticatedUser(classRepo.findAuthorEmailByClassId((Long) jp.getArgs()[0]).get())) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN);

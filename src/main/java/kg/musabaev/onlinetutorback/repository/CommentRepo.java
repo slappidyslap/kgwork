@@ -17,4 +17,6 @@ public interface CommentRepo extends JpaRepository<Comment, Long> {
 
 	@Query(value = "SELECT u.email FROM comments c LEFT JOIN users u ON c.author_id = u.id WHERE c.id = :id", nativeQuery = true)
 	Optional<String> findAuthorEmailByCommentId(Long id);
+
+	void deleteAllByBaseClassId(Long id);
 }

@@ -12,6 +12,7 @@ import kg.musabaev.onlinetutorback.model.GroupClass;
 import kg.musabaev.onlinetutorback.model.IndividualClass;
 import kg.musabaev.onlinetutorback.model.Specialist;
 import kg.musabaev.onlinetutorback.repository.CategoryRepo;
+import kg.musabaev.onlinetutorback.repository.CommentRepo;
 import kg.musabaev.onlinetutorback.repository.GroupClassRepo;
 import kg.musabaev.onlinetutorback.repository.IndividualClassRepo;
 import kg.musabaev.onlinetutorback.repository.projection.GroupClassItemView;
@@ -46,6 +47,7 @@ public class SimpleClassService implements ClassService {
 	GroupClassRepo groupClassRepo;
 	IndividualClassRepo individualClassRepo;
 	CategoryRepo categoryRepo;
+	CommentRepo commentRepo;
 
 	@Override
 	@Transactional
@@ -139,6 +141,28 @@ public class SimpleClassService implements ClassService {
 	public ResponseEntity<IndividualClassItemView> getIndividualClassById(long id) {
 		var clazz = individualClassRepo.findProjectedById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
 		return ResponseEntity.ok(clazz);
+	}
+
+	@Override
+	@Transactional
+	public ResponseEntity<Void> deleteGroupClass(long id) {
+		throwIf(new ClassNotFoundException(), () -> !groupClassRepo.existsById(id));
+
+		commentRepo.deleteAllByBaseClassId(id);
+		groupClassRepo.deleteById(id);
+
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	@Transactional
+	public ResponseEntity<Void> deleteIndividualClass(long id) {
+		throwIf(new ClassNotFoundException(), () -> !individualClassRepo.existsById(id));
+
+		commentRepo.deleteAllByBaseClassId(id);
+		individualClassRepo.deleteById(id);
+
+		return ResponseEntity.noContent().build();
 	}
 
 	public void throwConflictIf(Supplier<Boolean> function) {

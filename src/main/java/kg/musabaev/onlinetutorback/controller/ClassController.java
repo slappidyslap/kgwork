@@ -75,4 +75,15 @@ public class ClassController {
 	ResponseEntity<IndividualClassItemView> getIndividualClassById(@PathVariable long id) {
 		return classService.getIndividualClassById(id);
 	}
+
+	@DeleteMapping("/groups/{id}")
+	ResponseEntity<Void> deleteGroupClass(@PathVariable long id) {
+		return classService.deleteGroupClass(id);
+	}
+
+	@DeleteMapping("/individuals/{id}")
+	ResponseEntity<Void> deleteIndividualClass(@PathVariable long id) {
+		return classService.deleteIndividualClass(id);
+	}
+
 }
