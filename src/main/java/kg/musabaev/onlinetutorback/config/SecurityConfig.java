@@ -4,6 +4,7 @@ import kg.musabaev.onlinetutorback.filter.TokenFilter;
 import kg.musabaev.onlinetutorback.repository.UserRepo;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -17,12 +18,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.server.ResponseStatusException;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -30,6 +31,7 @@ import static org.springframework.http.HttpStatus.*;
 @EnableMethodSecurity
 @EnableWebSecurity
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class SecurityConfig {
 
 	UserRepo userRepo;
@@ -81,8 +83,12 @@ public class SecurityConfig {
 
 	@Bean
 	public UserDetailsService userDetailsService() {
+		log.debug("Fetching user...");
 		return username -> userRepo.findByEmail(username)
-				.orElseThrow(() -> new UsernameNotFoundException("user not found by username"));
+				.orElseThrow(() -> {
+					log.debug("User not found!");
+					return new ResponseStatusException(UNAUTHORIZED);
+				});
 	}
 
 	@Bean
