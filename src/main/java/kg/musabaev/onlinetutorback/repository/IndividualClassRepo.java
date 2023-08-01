@@ -23,8 +23,12 @@ public interface IndividualClassRepo extends JpaRepository<IndividualClass, Long
 			c.category AS category,
 			c.coverUrl AS coverUrl,
 			c.duration AS duration,
+			u.id AS authorId,
+			u.email AS authorUsername,
 			'individual_class' AS classType
 			FROM IndividualClass c
+			JOIN FETCH User u
+			WHERE u.id = c.author.id
 			""";
 
 	boolean existsByTitle(String title);
@@ -34,9 +38,9 @@ public interface IndividualClassRepo extends JpaRepository<IndividualClass, Long
 	@Query(queryProjected)
 	Page<IndividualClassItemView> findAllProjectedBy(Pageable pageable);
 
-	@Query(queryProjected + " WHERE c.id = :id")
+	@Query(queryProjected + " AND c.id = :id")
 	Optional<IndividualClassItemView> findProjectedById(long id);
 
-	@Query(queryProjected + "WHERE c.category.id = :id")
+	@Query(queryProjected + " AND c.category.id = :id")
 	Page<IndividualClassItemView> findAllProjectedByCategoryId(long id, Pageable pageable);
 }

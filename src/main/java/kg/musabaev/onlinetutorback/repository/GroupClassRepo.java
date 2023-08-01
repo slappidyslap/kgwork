@@ -25,8 +25,12 @@ public interface GroupClassRepo extends JpaRepository<GroupClass, Long> {
 			c.coverUrl AS coverUrl,
 			c.startDateTime AS startDateTime,
 			c.finishDateTime AS finishDateTime,
+			u.id AS authorId,
+			u.email AS authorUsername,
 			'group_class' AS classType
 			FROM GroupClass c
+			JOIN FETCH User u
+			WHERE u.id = c.author.id
 			""";
 
 	boolean existsByTitle(String title);
@@ -36,9 +40,9 @@ public interface GroupClassRepo extends JpaRepository<GroupClass, Long> {
 	@Query(queryProjected)
 	Page<GroupClassItemView> findAllProjectedBy(Pageable pageable);
 
-	@Query(queryProjected + " WHERE c.id = :id")
+	@Query(queryProjected + " AND c.id = :id")
 	Optional<GroupClassItemView> findProjectedById(long id);
 
-	@Query(queryProjected + "WHERE c.category.id = :id")
+	@Query(queryProjected + " AND c.category.id = :id")
 	Page<GroupClassItemView> findAllProjectedByCategoryId(long id, Pageable pageable);
 }

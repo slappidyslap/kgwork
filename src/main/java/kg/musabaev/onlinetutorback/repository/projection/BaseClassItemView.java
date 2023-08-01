@@ -13,4 +13,6 @@ public interface BaseClassItemView {
 	Category getCategory();
 	String getCoverUrl();
 	String getClassType();
+	Long getAuthorId();
+	String getAuthorUsername();
 }
