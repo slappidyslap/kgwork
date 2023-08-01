@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.springframework.http.HttpStatus.*;
@@ -36,18 +37,22 @@ public class SecurityConfig {
 
 	UserRepo userRepo;
 	TokenFilter tokenFilter;
+	CorsConfigurationSource corsConfigurationSource;
 
-	public SecurityConfig(UserRepo userRepo, @Lazy TokenFilter tokenFilter) {
+	public SecurityConfig(UserRepo userRepo, @Lazy TokenFilter tokenFilter, CorsConfigurationSource corsConfigurationSource) {
 		this.userRepo = userRepo;
 		this.tokenFilter = tokenFilter;
+		this.corsConfigurationSource = corsConfigurationSource;
 	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http
 				.csrf().disable()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and()
+				.cors(customizer -> customizer
+						.configurationSource(corsConfigurationSource))
+				.sessionManagement(customizer -> customizer
+						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.exceptionHandling(customizer -> customizer
 						.accessDeniedHandler((req, res, e) -> res.setStatus(FORBIDDEN.value()))
 						.authenticationEntryPoint(handle500statusAuthEntryPoint()))
