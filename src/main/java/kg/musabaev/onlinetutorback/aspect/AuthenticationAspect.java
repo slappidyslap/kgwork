@@ -1,7 +1,9 @@
 package kg.musabaev.onlinetutorback.aspect;
 
+import kg.musabaev.onlinetutorback.model.User;
 import kg.musabaev.onlinetutorback.repository.BaseClassRepo;
 import kg.musabaev.onlinetutorback.repository.CommentRepo;
+import kg.musabaev.onlinetutorback.repository.UserRepo;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,6 +25,7 @@ public class AuthenticationAspect {
 
 	BaseClassRepo classRepo;
 	CommentRepo commentRepo;
+	UserRepo userRepo;
 
 	@Pointcut("within(kg.musabaev.onlinetutorback.controller.CommentController)")
 	void commentController() {
@@ -30,6 +33,10 @@ public class AuthenticationAspect {
 
 	@Pointcut("within(kg.musabaev.onlinetutorback.controller.ClassController)")
 	void classController() {
+	}
+
+	@Pointcut("within(kg.musabaev.onlinetutorback.controller.UserController)")
+	void userController() {
 	}
 
 	@Before("""
@@ -48,6 +55,23 @@ public class AuthenticationAspect {
 			commentController() && execution(* deleteComment(..))""")
 	void beforeMethodsInCommentControllerVerifyAuthUserIsAuthor(JoinPoint jp) {
 		if (isNotAuthenticatedUser(commentRepo.findAuthorEmailByCommentId((Long) jp.getArgs()[0]).get())) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+		}
+	}
+
+	@Before("""
+			userController() && execution(* updateSpecialist(..)) ||
+			userController() && execution(* updateStudent(..)) ||
+			userController() && execution(* deleteSpecialist(..)) ||
+			userController() && execution(* addToFinishedClassesOfStudent(..)) ||
+			userController() && execution(* addToInProcessClassesOfStudent(..))""")
+	void beforeMethodsInUserControllerVerifyAuthUserIsAuthor(JoinPoint jp) {
+		UserDetails authenticatedPrincipal = (UserDetails) SecurityContextHolder
+				.getContext()
+				.getAuthentication()
+				.getPrincipal();
+		Long userId = ((User) authenticatedPrincipal).getId();
+		if (!userId.equals(jp.getArgs()[0])) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 		}
 	}
