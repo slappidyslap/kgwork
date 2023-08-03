@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-students-rated-specialists
+      author: Eld
+      changes:
+        - createTable:
+            tableName: students_rated_specialists
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: students_rated_specialists_id_fk
+              - column:
+                  name: student_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: students_rated_specialists_student_id__students_id_fk
+                    references: students (id)
+              - column:
+                  name: specialist_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: students_rated_specialists_specialist_id__specialist_id_fk
+                    references: specialists (id)
+        - addUniqueConstraint:
+            tableName: students_rated_specialists
+            columnNames: student_id, specialist_id

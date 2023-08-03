@@ -1,7 +1,6 @@
 package kg.musabaev.onlinetutorback.model;
 
 import jakarta.persistence.*;
-import kg.musabaev.onlinetutorback.domain.StudentRatedSpecialist;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -25,7 +24,11 @@ public class Student extends User {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	@Builder.Default
 	List<BaseClass> inProcessClasses = new ArrayList<>();
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "student")
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "students_rated_specialists",
+			joinColumns = @JoinColumn(name = "student_id"),
+			inverseJoinColumns = @JoinColumn(name = "specialist_id"))
 	@Builder.Default
-	List<StudentRatedSpecialist> studentRatedSpecialists = new ArrayList<>();
+	List<Specialist> ratedSpecialists = new ArrayList<>();
 }

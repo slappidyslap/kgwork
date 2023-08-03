@@ -1,14 +1,11 @@
 package kg.musabaev.onlinetutorback.model;
 
 import jakarta.persistence.*;
-import kg.musabaev.onlinetutorback.domain.StudentRatedSpecialist;
 import kg.musabaev.onlinetutorback.util.converter.PeriodInMonthsConverter;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "specialists")
@@ -31,7 +28,4 @@ public class Specialist extends User {
 	@Column(nullable = false)
 	@Convert(converter = PeriodInMonthsConverter.class)
 	Period workExperience;
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "specialist")
-	@Builder.Default
-	List<StudentRatedSpecialist> studentRatedSpecialists = new ArrayList<>();
 }

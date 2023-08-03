@@ -12,4 +12,6 @@ public interface BaseClassRepo extends JpaRepository<BaseClass, Long> {
 
     @Query(value = "SELECT u.email FROM base_classes c LEFT JOIN users u ON c.author_id = u.id WHERE c.id = :id", nativeQuery = true)
     Optional<String> findAuthorEmailByClassId(Long id);
+
+    void deleteAllByAuthorId(long id);
 }

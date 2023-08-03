@@ -1,5 +1,6 @@
 package kg.musabaev.onlinetutorback.service.impl;
 
+import jakarta.persistence.Tuple;
 import kg.musabaev.onlinetutorback.dto.request.*;
 import kg.musabaev.onlinetutorback.dto.response.RegisterUserResponse;
 import kg.musabaev.onlinetutorback.exception.ClassNotFoundException;
@@ -200,6 +201,23 @@ public class SimpleUserService implements UserService {
 		return ResponseEntity.ok(studentRepo.findAllInProcessClassesClasses(id, pageable));
 	}
 
+	@Override
+	@Transactional
+	public ResponseEntity<Void> rateSpecialist(long studentId, long specialistId, RateSpecialist dto) {
+		throwConflictIf(() -> studentRepo.existsInStudentsRatedSpecialists(studentId, specialistId));
+
+		Tuple reputationAndRatingsNumber = specialistRepo
+				.findReputationAndNumberRatingsOfSpecialist(specialistId).orElseThrow(UserNotFoundException::new);
+		double reputation = (double) reputationAndRatingsNumber.get("reputation");
+		int ratingsNumber = (int) reputationAndRatingsNumber.get("ratings_number");
+
+		double newReputation = getNewReputation(reputation, ratingsNumber, dto.getRating());
+		specialistRepo.updateReputation(specialistId, newReputation);
+		studentRepo.saveStudentRatedSpecialist(studentId, specialistId);
+
+		return ResponseEntity.noContent().build();
+	}
+
 	public void throwConflictIf(Supplier<Boolean> function) {
 		if (function.get()) throw new ResponseStatusException(CONFLICT);
 	}
@@ -210,5 +228,12 @@ public class SimpleUserService implements UserService {
 
 	public void throwClassNotFoundIf(Supplier<Boolean> function) {
 		if (function.get()) throw new ClassNotFoundException();
+	}
+
+	public double getNewReputation(double currentReputation, int ratingsNumber, int newRating) {
+		double t = currentReputation * ratingsNumber + newRating;
+		ratingsNumber++;
+		currentReputation = t / ratingsNumber;
+		return currentReputation;
 	}
 }

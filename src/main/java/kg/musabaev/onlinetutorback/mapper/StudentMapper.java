@@ -16,7 +16,7 @@ public interface StudentMapper {
 	@Mapping(target = "createdDate", ignore = true)
 	@Mapping(target = "finishedClasses", ignore = true)
 	@Mapping(target = "inProcessClasses", ignore = true)
-	@Mapping(target = "studentRatedSpecialists", ignore = true)
+	@Mapping(target = "ratedSpecialists", ignore = true)
 	Student toModel(RegisterStudentRequest dto);
 
 	@Mapping(target = "id", ignore = true)
@@ -24,7 +24,10 @@ public interface StudentMapper {
 	@Mapping(target = "createdDate", ignore = true)
 	@Mapping(target = "finishedClasses", ignore = true)
 	@Mapping(target = "inProcessClasses", ignore = true)
-	@Mapping(target = "studentRatedSpecialists", ignore = true)
+	@Mapping(target = "ratedSpecialists", ignore = true)
+	@Mapping(target = "gender", ignore = true)
+	@Mapping(target = "password", ignore = true)
+	@Mapping(target = "authorities", ignore = true)
 	void update(UpdateStudentRequest dto, @MappingTarget Student model);
 
 	RegisterUserResponse toDto(Student model);

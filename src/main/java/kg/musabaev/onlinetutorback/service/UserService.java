@@ -38,4 +38,6 @@ public interface UserService {
 	ResponseEntity<Page<BaseClassItemView>> getFinishedClassesOfStudent(long id, Pageable pageable);
 
 	ResponseEntity<Page<BaseClassItemView>> getInProcessClassesOfStudent(long id, Pageable pageable);
+
+	ResponseEntity<Void> rateSpecialist(long studentId, long specialistId, RateSpecialist dto);
 }

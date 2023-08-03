@@ -19,7 +19,6 @@ public interface SpecialistMapper {
 	@Mapping(target = "role", ignore = true)
 	@Mapping(target = "createdDate", ignore = true)
 	@Mapping(target = "ratingsNumber", ignore = true)
-	@Mapping(target = "studentRatedSpecialists", ignore = true)
 	@Mapping(target = "workExperience", source = "workExperienceInMonths", qualifiedByName = "monthsToPeriod")
 	Specialist toModel(RegisterSpecialistRequest dto);
 
@@ -30,7 +29,9 @@ public interface SpecialistMapper {
 	@Mapping(target = "role", ignore = true)
 	@Mapping(target = "createdDate", ignore = true)
 	@Mapping(target = "ratingsNumber", ignore = true)
-	@Mapping(target = "studentRatedSpecialists", ignore = true)
+	@Mapping(target = "gender", ignore = true)
+	@Mapping(target = "password", ignore = true)
+	@Mapping(target = "authorities", ignore = true)
 	@Mapping(target = "workExperience", source = "workExperienceInMonths", qualifiedByName = "monthsToPeriod")
 	void update(UpdateSpecialistRequest dto, @MappingTarget Specialist model);
 

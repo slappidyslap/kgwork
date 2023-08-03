@@ -32,3 +32,6 @@ databaseChangeLog:
   - include:
       file: changeset/add-default-value-for-ratings-number.yml
       relativeToChangelogFile: true
+  - include:
+      file: changeset/create-table-students-rated-specialists.yml
+      relativeToChangelogFile: true

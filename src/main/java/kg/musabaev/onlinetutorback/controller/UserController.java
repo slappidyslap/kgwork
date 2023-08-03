@@ -110,4 +110,13 @@ public class UserController {
 			@ParameterObject @PageableDefault Pageable pageable) {
 		return userService.getInProcessClassesOfStudent(id, pageable);
 	}
+
+	@PostMapping("/students/{studentId}/specialists/{specialistId}")
+	ResponseEntity<Void> rateSpecialist(
+			@PathVariable long studentId,
+			@PathVariable long specialistId,
+			@Valid @RequestBody RateSpecialist dto
+	) {
+		return userService.rateSpecialist(studentId, specialistId, dto);
+	}
 }
