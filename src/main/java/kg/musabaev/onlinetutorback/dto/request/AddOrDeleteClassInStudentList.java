@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AddClassToStudentList {
+public class AddOrDeleteClassInStudentList {
 	@NotNull
 	@Positive
 	Long classId;

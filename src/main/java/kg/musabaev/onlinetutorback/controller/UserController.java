@@ -72,15 +72,29 @@ public class UserController {
 	@PostMapping("/students/{id}/finished-classes")
 	ResponseEntity<Void> addToFinishedClassesOfStudent(
 			@PathVariable long id,
-			@Valid @RequestBody AddClassToStudentList dto) {
+			@Valid @RequestBody AddOrDeleteClassInStudentList dto) {
 		return userService.addToFinishedClassesOfStudent(id, dto);
 	}
 
 	@PostMapping("/students/{id}/in-process-classes")
 	ResponseEntity<Void> addToInProcessClassesOfStudent(
 			@PathVariable long id,
-			@Valid @RequestBody AddClassToStudentList dto) {
+			@Valid @RequestBody AddOrDeleteClassInStudentList dto) {
 		return userService.addToInProcessClassesOfStudent(id, dto);
+	}
+
+	@DeleteMapping("/students/{id}/finished-classes")
+	ResponseEntity<Void> deleteFromFinishedClassesOfStudent(
+			@PathVariable long id,
+			@Valid @RequestBody AddOrDeleteClassInStudentList dto) {
+		return userService.deleteFromFinishedClassesOfStudent(id, dto);
+	}
+
+	@DeleteMapping("/students/{id}/in-process-classes")
+	ResponseEntity<Void> deleteFromInProcessClassesOfStudent(
+			@PathVariable long id,
+			@Valid @RequestBody AddOrDeleteClassInStudentList dto) {
+		return userService.deleteFromInProcessClassesOfStudent(id, dto);
 	}
 
 	@GetMapping("/students/{id}/finished-classes")

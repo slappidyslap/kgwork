@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -135,22 +136,54 @@ public class SimpleUserService implements UserService {
 
 	@Override
 	@Transactional
-	public ResponseEntity<Void> addToFinishedClassesOfStudent(long id, AddClassToStudentList dto) {
+	public ResponseEntity<Void> addToFinishedClassesOfStudent(long id, AddOrDeleteClassInStudentList dto) {
 		throwClassNotFoundIf(() -> !baseClassRepo.existsById(dto.getClassId()));
 
 		Optional<Student> persistedStudent = studentRepo.findById(id);
-		persistedStudent.ifPresent(s -> s.getFinishedClasses().add(baseClassRepo.getReferenceById(dto.getClassId())));
+		persistedStudent.ifPresent(s -> {
+			s.getFinishedClasses().add(baseClassRepo.getReferenceById(dto.getClassId()));
+			studentRepo.save(s);
+		});
 		persistedStudent.orElseThrow(UserNotFoundException::new);
 		return ResponseEntity.noContent().build();
 	}
 
 	@Override
 	@Transactional
-	public ResponseEntity<Void> addToInProcessClassesOfStudent(long id, AddClassToStudentList dto) {
+	public ResponseEntity<Void> addToInProcessClassesOfStudent(long id, AddOrDeleteClassInStudentList dto) {
 		throwClassNotFoundIf(() -> !baseClassRepo.existsById(dto.getClassId()));
 
 		Optional<Student> persistedStudent = studentRepo.findById(id);
-		persistedStudent.ifPresent(s -> s.getInProcessClasses().add(baseClassRepo.getReferenceById(dto.getClassId())));
+		persistedStudent.ifPresent(s -> {
+			s.getInProcessClasses().add(baseClassRepo.getReferenceById(dto.getClassId()));
+			studentRepo.save(s);
+		});
+		persistedStudent.orElseThrow(UserNotFoundException::new);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> deleteFromFinishedClassesOfStudent(long id, AddOrDeleteClassInStudentList dto) {
+		throwClassNotFoundIf(() -> !baseClassRepo.existsById(dto.getClassId()));
+
+		Optional<Student> persistedStudent = studentRepo.findById(id);
+		persistedStudent.ifPresent(s -> {
+			s.getFinishedClasses().removeIf(c -> Objects.equals(c.getId(), dto.getClassId()));
+			studentRepo.save(s);
+		});
+		persistedStudent.orElseThrow(UserNotFoundException::new);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> deleteFromInProcessClassesOfStudent(long id, AddOrDeleteClassInStudentList dto) {
+		throwClassNotFoundIf(() -> !baseClassRepo.existsById(dto.getClassId()));
+
+		Optional<Student> persistedStudent = studentRepo.findById(id);
+		persistedStudent.ifPresent(s -> {
+			s.getInProcessClasses().removeIf(c -> Objects.equals(c.getId(), dto.getClassId()));
+			studentRepo.save(s);
+		});
 		persistedStudent.orElseThrow(UserNotFoundException::new);
 		return ResponseEntity.noContent().build();
 	}

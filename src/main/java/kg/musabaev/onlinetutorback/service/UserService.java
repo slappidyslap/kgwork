@@ -27,9 +27,13 @@ public interface UserService {
 
 	ResponseEntity<Void> updateStudentById(long id, UpdateStudentRequest dto);
 
-	ResponseEntity<Void> addToFinishedClassesOfStudent(long id, AddClassToStudentList dto);
+	ResponseEntity<Void> addToFinishedClassesOfStudent(long id, AddOrDeleteClassInStudentList dto);
 
-	ResponseEntity<Void> addToInProcessClassesOfStudent(long id, AddClassToStudentList dto);
+	ResponseEntity<Void> addToInProcessClassesOfStudent(long id, AddOrDeleteClassInStudentList dto);
+
+	ResponseEntity<Void> deleteFromFinishedClassesOfStudent(long id, AddOrDeleteClassInStudentList dto);
+
+	ResponseEntity<Void> deleteFromInProcessClassesOfStudent(long id, AddOrDeleteClassInStudentList dto);
 
 	ResponseEntity<Page<BaseClassItemView>> getFinishedClassesOfStudent(long id, Pageable pageable);
 
