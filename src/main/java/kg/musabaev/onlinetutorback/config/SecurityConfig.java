@@ -1,13 +1,13 @@
 package kg.musabaev.onlinetutorback.config;
 
+import kg.musabaev.onlinetutorback.filter.CsrfCookieFilter;
 import kg.musabaev.onlinetutorback.filter.TokenFilter;
-import kg.musabaev.onlinetutorback.repository.UserRepo;
 import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -23,26 +23,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.server.ResponseStatusException;
 
 import static org.springframework.http.HttpStatus.*;
 
 @Configuration
 @EnableMethodSecurity
 @EnableWebSecurity
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class SecurityConfig {
 
 	UserDetailsService userDetailsService;
 	TokenFilter tokenFilter;
+	CsrfCookieFilter csrfCookieFilter;
 	CorsConfigurationSource corsConfigurationSource;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http
-				.csrf().disable()
+				.csrf(csrf -> csrf
+						.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+						.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+						.ignoringRequestMatchers("/auth/authenticate"))
 				.cors(customizer -> customizer
 						.configurationSource(corsConfigurationSource))
 				.sessionManagement(customizer -> customizer
@@ -52,13 +59,14 @@ public class SecurityConfig {
 						.authenticationEntryPoint(handle500statusAuthEntryPoint()))
 				.authenticationProvider(authenticationProvider())
 				.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
+				.addFilterAfter(csrfCookieFilter, BasicAuthenticationFilter.class)
 				.authorizeHttpRequests(customizer -> customizer
 						.requestMatchers(HttpMethod.POST, "/users/specialists").permitAll()
 						.requestMatchers(HttpMethod.POST, "/users/students").permitAll()
 						.requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
 						.requestMatchers(HttpMethod.GET, "/classes/**").permitAll()
 						.requestMatchers("/auth/**").permitAll()
-						.requestMatchers("/api-docs/**", "/swagger-ui/**", "/actuator/**").permitAll()
+						.requestMatchers("/api-docs/**", "/swagger-ui/**", "/actuator/**", "/csrf").permitAll()
 						.anyRequest().authenticated())
 				.build();
 	}
