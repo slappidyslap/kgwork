@@ -35,15 +35,9 @@ import static org.springframework.http.HttpStatus.*;
 @Slf4j
 public class SecurityConfig {
 
-	UserRepo userRepo;
+	UserDetailsService userDetailsService;
 	TokenFilter tokenFilter;
 	CorsConfigurationSource corsConfigurationSource;
-
-	public SecurityConfig(UserRepo userRepo, @Lazy TokenFilter tokenFilter, CorsConfigurationSource corsConfigurationSource) {
-		this.userRepo = userRepo;
-		this.tokenFilter = tokenFilter;
-		this.corsConfigurationSource = corsConfigurationSource;
-	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -81,19 +75,9 @@ public class SecurityConfig {
 	@Bean
 	public AuthenticationProvider authenticationProvider() {
 		var daoAuthenticationProvider = new DaoAuthenticationProvider();
-		daoAuthenticationProvider.setUserDetailsService(userDetailsService());
+		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
 		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
 		return daoAuthenticationProvider;
-	}
-
-	@Bean
-	public UserDetailsService userDetailsService() {
-		log.debug("Fetching user...");
-		return username -> userRepo.findByEmail(username)
-				.orElseThrow(() -> {
-					log.debug("User not found!");
-					return new ResponseStatusException(UNAUTHORIZED);
-				});
 	}
 
 	@Bean
