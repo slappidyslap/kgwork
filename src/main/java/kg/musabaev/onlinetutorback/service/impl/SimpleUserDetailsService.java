@@ -1,4 +1,4 @@
-package kg.musabaev.onlinetutorback.service;
+package kg.musabaev.onlinetutorback.service.impl;
 
 import kg.musabaev.onlinetutorback.repository.UserRepo;
 import lombok.AccessLevel;
