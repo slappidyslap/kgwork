@@ -8,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -28,6 +27,8 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpStatus.*;
 
 @Configuration
@@ -61,12 +62,12 @@ public class SecurityConfig {
 				.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
 				.addFilterAfter(csrfCookieFilter, BasicAuthenticationFilter.class)
 				.authorizeHttpRequests(customizer -> customizer
-						.requestMatchers(HttpMethod.POST, "/users/specialists").permitAll()
-						.requestMatchers(HttpMethod.POST, "/users/students").permitAll()
-						.requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
-						.requestMatchers(HttpMethod.GET, "/classes/**").permitAll()
+						.requestMatchers(POST, "/users/specialists", "/users/students").permitAll()
+						.requestMatchers(GET, "/users/**").permitAll()
+						.requestMatchers(GET, "/categories/**").permitAll()
+						.requestMatchers(GET, "/classes/**").permitAll()
 						.requestMatchers("/auth/**").permitAll()
-						.requestMatchers("/api-docs/**", "/swagger-ui/**", "/actuator/**", "/csrf").permitAll()
+						.requestMatchers("/api-docs/**", "/swagger-ui/**", "/actuator/**").permitAll()
 						.anyRequest().authenticated())
 				.build();
 	}
