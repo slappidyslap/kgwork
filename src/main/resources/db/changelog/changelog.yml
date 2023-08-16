@@ -35,3 +35,6 @@ databaseChangeLog:
   - include:
       file: changeset/create-table-students-rated-specialists.yml
       relativeToChangelogFile: true
+  - include:
+      file: changeset/create-password-reset-token-table.yml
+      relativeToChangelogFile: true

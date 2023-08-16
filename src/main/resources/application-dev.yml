@@ -12,6 +12,16 @@ spring:
         use_sql_comments: true
     hibernate:
       ddl-auto: validate
+  mail:
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    host: smtp.gmail.com
+    port: 587
+    protocol: smtp
+    properties.mail.smtp.auth: true
+    properties.mail.smtp.starttls.enable: true
+  mustache:
+    suffix: .html
 
 management:
   endpoints:
@@ -38,3 +48,5 @@ app:
     access-token-expiration-ms: "#{${ACCESS_TOKEN_EXPIRATION_MS:1000 * 60 * 15}}" # 15 минут
     refresh-token-expiration-ms: "#{${REFRESH_TOKEN_EXPIRATION_MS:1000 * 60  * 60 * 24}}" # 1 день
     secret-key: ${SECRET_KEY:2DS534KHJ234FD059FK34JK8920DQIWP423XZ4234X423CXJ75123FJD4KD423LS}
+    password-reset-token-length: ${PASSWORD_RESET_TOKEN_LENGTH:64}
+    password-reset-token-expiration-ms: "#{${PASSWORD_RESET_TOKEN_EXPIRATION_MS:1000 * 60 * 15}}" # 15 минут

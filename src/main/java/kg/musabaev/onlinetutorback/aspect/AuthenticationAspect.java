@@ -1,5 +1,6 @@
 package kg.musabaev.onlinetutorback.aspect;
 
+import kg.musabaev.onlinetutorback.dto.request.PasswordResetTokenRequest;
 import kg.musabaev.onlinetutorback.model.User;
 import kg.musabaev.onlinetutorback.repository.BaseClassRepo;
 import kg.musabaev.onlinetutorback.repository.CommentRepo;
@@ -16,6 +17,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Objects;
 
 @Component
 @Aspect
@@ -37,6 +40,10 @@ public class AuthenticationAspect {
 
 	@Pointcut("within(kg.musabaev.onlinetutorback.controller.UserController)")
 	void userController() {
+	}
+
+	@Pointcut("within(kg.musabaev.onlinetutorback.controller.PasswordResetController)")
+	void passwordResetController() {
 	}
 
 	@Before("""
@@ -66,10 +73,28 @@ public class AuthenticationAspect {
 			userController() && execution(* addToFinishedClassesOfStudent(..)) ||
 			userController() && execution(* addToInProcessClassesOfStudent(..))""")
 	void beforeMethodsInUserControllerVerifyAuthUserIsAuthor(JoinPoint jp) {
-		UserDetails authenticatedPrincipal = (UserDetails) SecurityContextHolder
-				.getContext()
-				.getAuthentication()
-				.getPrincipal();
+		UserDetails authenticatedPrincipal = getAuthenticatedPrincipal();
+		Long userId = ((User) authenticatedPrincipal).getId();
+		if (!userId.equals(jp.getArgs()[0])) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+		}
+	}
+
+	@Before("""
+			passwordResetController() && execution(* generatePasswordResetToken(..))""")
+	void beforeMethodsPasswordResetControllerVerifyAuthUserIsOwner1(JoinPoint jp) {
+		UserDetails authenticatedPrincipal = getAuthenticatedPrincipal();
+		String email = ((User) authenticatedPrincipal).getEmail();
+		String actualEmail = ((PasswordResetTokenRequest) jp.getArgs()[0]).getUsername();
+		if (Objects.equals(email, actualEmail)) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+		}
+	}
+
+	@Before("""
+			passwordResetController() && execution(* resetPassword(..))""")
+	void beforeMethodsPasswordResetControllerVerifyAuthUserIsOwner2(JoinPoint jp) {
+		UserDetails authenticatedPrincipal = getAuthenticatedPrincipal();
 		Long userId = ((User) authenticatedPrincipal).getId();
 		if (!userId.equals(jp.getArgs()[0])) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -77,10 +102,14 @@ public class AuthenticationAspect {
 	}
 
 	public static boolean isNotAuthenticatedUser(String actualUserUsername) {
-		UserDetails authenticatedPrincipal = (UserDetails) SecurityContextHolder
+		UserDetails authenticatedPrincipal = getAuthenticatedPrincipal();
+		return !authenticatedPrincipal.getUsername().equals(actualUserUsername);
+	}
+
+	public static UserDetails getAuthenticatedPrincipal() {
+		return (UserDetails) SecurityContextHolder
 				.getContext()
 				.getAuthentication()
 				.getPrincipal();
-		return !authenticatedPrincipal.getUsername().equals(actualUserUsername);
 	}
 }
